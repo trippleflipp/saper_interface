@@ -51,10 +51,12 @@ export class Board {
   checkCell(cell: Cell): 'gameover' | 'win' | undefined {
     if (cell.status !== 'open') {
       return;
-    } else if (cell.mine) {
+    } 
+    else if (cell.mine) {
       this.revealAll();
       return 'gameover';
-    } else {
+    } 
+    else {
       cell.status = 'clear';
 
       if(cell.proximityMines === 0) {
@@ -68,13 +70,13 @@ export class Board {
         }
       }
 
-
       if (this.remainingCells-- <= 1) {
         return 'win';
       }
       return;
     }
   }
+
   revealAll() {
     for (const row of this.cells) {
       for (const cell of row) {

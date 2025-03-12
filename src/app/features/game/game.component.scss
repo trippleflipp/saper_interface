@@ -5,6 +5,12 @@ $highlight-color: #fff;
 $mine-color: #d32f2f;
 $flag-color: #fdd835;
 
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 table {
   border-collapse: collapse;
   margin: 20px;
