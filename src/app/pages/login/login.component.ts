@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.initLoginForm();
+    
   }
 
   initLoginForm(): void {
@@ -60,7 +61,12 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.authService.login(this.loginForm.value).subscribe((res) => {
       this.authService.setToken(res.access_token);
-      this.router.navigate(['/home']);
+      this.authService.navigate();
     })
+  }
+
+  signInAsGuest(): void {
+    this.loading = true;
+    this.router.navigate(['/guest']);
   }
 }

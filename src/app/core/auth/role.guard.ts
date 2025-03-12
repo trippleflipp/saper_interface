@@ -16,7 +16,6 @@ export class RoleGuard implements CanActivate {
     if (!this.authService.hasToken() || userRole !== expectedRole) {
       this.router.navigate(['/home']);
     }
-
     return true;
   }
 }
