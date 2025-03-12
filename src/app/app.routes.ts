@@ -5,6 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard } from './core/auth/auth.guard';
 import { AdminComponent } from './pages/admin/admin.component';
 import { RoleGuard } from './core/auth/role.guard';
+import { GuestComponent } from './pages/guest/guest.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -19,6 +20,10 @@ export const routes: Routes = [
         component: AdminComponent, 
         canActivate: [AuthGuard, RoleGuard], 
         data: { role: 'admin' },
+    },
+    {
+        path: 'guest', 
+        component: GuestComponent, 
     },
     { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];

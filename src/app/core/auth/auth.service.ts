@@ -57,7 +57,6 @@ export class AuthService {
         return payload.role || null;
       } catch (error) {
         console.error('Error decoding token:', error);
-        return null;
       }
     }
     return null;
@@ -65,5 +64,17 @@ export class AuthService {
 
   getProtectedData(): Observable<any> {
       return this.http.get(`${this.baseUrl}/protected`);
+  }
+
+  navigate(): void {
+    const role = this.getRoleFromToken();
+    if (role === 'admin') {
+      this.router.navigate(['/admin']);
+    } else if (role === 'player') {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/login']);
+      console.error('Unknown role, navigating to /login');
+    }
   }
 }
