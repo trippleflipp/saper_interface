@@ -47,7 +47,7 @@ export class TimerComponent implements OnDestroy {
       if (this.timerSubscription) {
         this.timerSubscription.unsubscribe();
       }
-      this.timerStopped.emit(this.mm * 60 + this.ss);
+      this.timerStopped.emit((this.mm * 60 + this.ss) * 1000 + this.ms);
     }
   }
 
