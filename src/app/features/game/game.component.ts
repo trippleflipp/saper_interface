@@ -21,9 +21,11 @@ export class GameComponent implements AfterViewInit {
   firstClicked = false;
   board: Board;
   gameTime: number = 0;
+  boardSize: number = 20;
+  mineCount: number = 30;
 
   constructor() {
-    this.board = new Board(20, 30);
+    this.board = new Board(this.boardSize, this.mineCount);
   }
 
   ngAfterViewInit(): void {
@@ -34,6 +36,7 @@ export class GameComponent implements AfterViewInit {
 
   checkCell(cell: Cell): void {
     if (!this.firstClicked) {
+      this.board.generateBoard(cell.row, cell.column);
       this.startTimer();
       this.firstClicked = true;
     }
@@ -52,17 +55,12 @@ export class GameComponent implements AfterViewInit {
 
   flag(cell: Cell): void {
     if (cell.status !== 'clear') {
-      if (cell.status === 'flag') {
-        cell.status = 'open';
-      }
-      else {
-        cell.status = 'flag';
-      }
+      cell.status = cell.status === 'flag' ? 'open' : 'flag';
     }
   }
 
   reset(): void {
-    this.board = new Board(20, 30);
+    this.board = new Board(this.boardSize, this.mineCount);
     this.resetTimer();
     this.firstClicked = false;
   }
@@ -88,8 +86,8 @@ export class GameComponent implements AfterViewInit {
   }
 
   formatTime(totalSeconds: number): string {
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
 }
