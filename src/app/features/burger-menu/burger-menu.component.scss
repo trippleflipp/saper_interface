@@ -1,0 +1,38 @@
+.burger-menu {
+    user-select: none; 
+    position: fixed;
+    top: 46px; /* Высота header */
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #f0f0f0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease-out;
+    z-index: 1000; /* Убедитесь, что меню поверх других элементов */
+}
+
+.burger-menu.open {
+    transform: translateX(0);
+}
+
+.menu-content {
+    padding: 20px;
+}
+
+.menu-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-content li {
+    padding: 10px 0;
+}
+
+.menu-content a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+}

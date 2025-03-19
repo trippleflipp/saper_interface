@@ -54,8 +54,10 @@ export class GameComponent implements AfterViewInit {
   }
 
   flag(cell: Cell): void {
-    if (cell.status !== 'clear') {
-      cell.status = cell.status === 'flag' ? 'open' : 'flag';
+    if (this.firstClicked) {
+      if (cell.status !== 'clear') {
+        cell.status = cell.status === 'flag' ? 'open' : 'flag';
+      }
     }
   }
 
