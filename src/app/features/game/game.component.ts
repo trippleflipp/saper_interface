@@ -4,6 +4,9 @@ import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { TimerComponent } from "./timer/timer.component";
 import { ConfettiComponent } from '../confetti/confetti.component';
+import { SnackbarComponent } from '../snackbar/snackbar.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackbarData } from '../../interfaces/snackbardata.model';
 
 @Component({
   selector: 'app-game',
@@ -13,7 +16,8 @@ import { ConfettiComponent } from '../confetti/confetti.component';
     NgIf,
     NgClass,
     TimerComponent,
-    ConfettiComponent
+    ConfettiComponent,
+    MatSnackBarModule
 ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
@@ -28,7 +32,9 @@ export class GameComponent implements AfterViewInit {
   boardSize: number = 20;
   mineCount: number = 30;
 
-  constructor() {
+  constructor(
+    private snackBar: MatSnackBar
+  ) {
     this.board = new Board(this.boardSize, this.mineCount);
   }
 
@@ -48,12 +54,13 @@ export class GameComponent implements AfterViewInit {
     if (result === 'gameover') {
       this.stopTimer();
       this.firstClicked = false;
-      alert(`You lose! Time: ${this.formatTime(this.gameTime)}`);
+      this.openSnackbar("Вы проиграли!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
     }
     else if (result === 'win') {
       this.stopTimer();
       this.firstClicked = false;
       this.launchConfetti();
+      this.openSnackbar("Победа!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
     }
   }
 
@@ -101,5 +108,18 @@ export class GameComponent implements AfterViewInit {
 
   launchConfetti() {
     this.confettiComponent?.launchConfetti();
+  }
+
+  openSnackbar(title: string, message: string, duration: number): void {
+    const data: SnackbarData = {
+      title: title,
+      message: message,
+      duration: duration,
+      button: null
+    }
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: data,
+      duration: undefined
+    });
   }
 }

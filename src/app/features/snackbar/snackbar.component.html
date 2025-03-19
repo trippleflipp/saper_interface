@@ -1,0 +1,11 @@
+<div class="snackbar-container">
+    <div class="snackbar-header">
+      <span class="snackbar-title">{{ data.title }}</span>
+      <button mat-button (click)="closeSnackbar()">
+        {{ data.button || "Ок" }}
+      </button>
+    </div>
+    <div class="snackbar-content">
+      {{ data.message }}
+    </div>
+  </div>
