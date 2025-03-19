@@ -1,49 +1,70 @@
-import { Component, Input } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-timer',
+  standalone: true,
   imports: [],
   templateUrl: './timer.component.html',
   styleUrl: './timer.component.scss'
 })
-export class TimerComponent {
+export class TimerComponent implements OnDestroy {
   mm = 0;
   ss = 0;
   ms = 0;
   isRunning = false;
-  timerId = 0;
+  private timerSubscription: Subscription | undefined;
 
-  @Input() timerReset(): void {
-    clearInterval(this.timerId);
-    this.isRunning = false;
+  @Output() timerStopped: EventEmitter<number> = new EventEmitter<number>();
+
+  start(): void {
+    if (!this.isRunning) {
+      this.isRunning = true;
+      const startTime = Date.now() - (this.mm * 60000 + this.ss * 1000 + this.ms * 10);
+
+      this.timerSubscription = interval(10)
+        .pipe(
+          map(() => {
+            const now = Date.now();
+            const diff = now - startTime;
+
+            this.mm = Math.floor(diff / 60000);
+            this.ss = Math.floor((diff % 60000) / 1000);
+            this.ms = Math.floor((diff % 1000) / 10);
+
+            return { mm: this.mm, ss: this.ss, ms: this.ms };
+          })
+        )
+        .subscribe();
+    }
+  }
+
+
+  stop(): void {
+    if (this.isRunning) {
+      this.isRunning = false;
+      if (this.timerSubscription) {
+        this.timerSubscription.unsubscribe();
+      }
+      this.timerStopped.emit(this.mm * 60 + this.ss);
+    }
+  }
+
+  timerReset(): void {
+    this.stop();
     this.mm = 0;
     this.ss = 0;
     this.ms = 0;
   }
 
-  @Input() startStop() {
-    if (!this.isRunning) {
-      this.timerId = setInterval(() => {
-        this.ms++;
+  format(num: number): string {
+    return (num + '').padStart(2, '0');
+  }
 
-        if (this.ms >= 100) {
-          this.ss++;
-          this.ms = 0;
-        }
-        if (this.ss >= 60) {
-          this.mm++;
-          this.ss = 0
-        }
-      }, 10);
-    } else {
-      clearInterval(this.timerId);
+  ngOnDestroy(): void {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
     }
-    this.isRunning = !this.isRunning;
   }
-
-  format(num: number) {
-    return (num + '').length === 1 ? '0' + num : num + '';
-  }
-
-  
 }
