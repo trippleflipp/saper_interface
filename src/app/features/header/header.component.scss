@@ -1,0 +1,33 @@
+.header-container {
+    display: flex;
+    align-items: center;
+    background-color: #3498db;
+    height: 46px;
+}
+
+.outer-container {
+    padding-left: 3px;
+}
+
+.svg-container svg {
+    vertical-align: middle;
+    cursor: pointer;
+    width:40px;
+    height:40px;
+}
+  
+.rotate {
+    animation: rotate 0.2s ease-out;
+    transform-origin: center;
+}
+  
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(
+          calc(360deg * var(--rotation-direction))
+        );
+    }
+}
