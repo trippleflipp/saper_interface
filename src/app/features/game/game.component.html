@@ -26,5 +26,5 @@
 	</table>
 
 	<button (click)="reset()">Перезапустить</button>
-	<app-timer></app-timer>
+	<app-timer (timerStopped)="onTimerStopped($event)"></app-timer>
 </div>
