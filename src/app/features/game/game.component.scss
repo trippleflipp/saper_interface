@@ -45,11 +45,12 @@ td {
   &[data-status='flag'] {
     background-color: #ddd;
     cursor: pointer;
+    
 
     svg {
       width: $cell-size - 6px;
       height: $cell-size - 6px;
-      margin: 3px;
+      margin: auto;
     }
   }
 
@@ -60,12 +61,16 @@ td {
     svg {
       width: $cell-size - 6px;
       height: $cell-size - 6px;
-      margin: 3px;
+      margin: auto;
       fill: #fff;
     }
   }
 
   div {
+    display: flex;
+    align-self: center;
+    width: fit-content;
+    margin: auto;
     &.proximity-1 { color: blue; }
     &.proximity-2 { color: green; }
     &.proximity-3 { color: red; }
@@ -108,5 +113,5 @@ button {
 svg {
   width: $cell-size - 6px;
   height: $cell-size - 6px;
-  margin: 3px;
+  margin: auto;
 }
