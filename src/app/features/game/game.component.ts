@@ -1,50 +1,56 @@
-import { AfterContentInit, AfterViewInit, Component, Inject, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
-import { SvoComponent } from "../svo/svo.component";
 import { TimerComponent } from "./timer/timer.component";
 
 @Component({
   selector: 'app-game',
+  standalone: true,
   imports: [
     NgFor,
     NgIf,
     NgClass,
-    SvoComponent,
     TimerComponent
 ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-export class GameComponent {
-  @ViewChild(TimerComponent) timer: TimerComponent;
-  firstClicked: boolean = false;
+export class GameComponent implements AfterViewInit {
+  @ViewChild(TimerComponent) timer: TimerComponent | undefined;
+  firstClicked = false;
   board: Board;
+  gameTime: number = 0;
 
   constructor() {
     this.board = new Board(20, 30);
   }
 
-  checkCell(cell: Cell) {
+  ngAfterViewInit(): void {
+      if (!this.timer) {
+          console.error("TimerComponent is not available in GameComponent");
+      }
+  }
+
+  checkCell(cell: Cell): void {
     if (!this.firstClicked) {
-      this.timer.startStop();
+      this.startTimer();
       this.firstClicked = true;
     }
     const result = this.board.checkCell(cell);
     if (result === 'gameover') {
-      this.timer.startStop();
+      this.stopTimer();
       this.firstClicked = false;
-      alert('You lose');
+      alert(`You lose! Time: ${this.formatTime(this.gameTime)}`);
     }
     else if (result === 'win') {
-      this.timer.startStop();
+      this.stopTimer();
       this.firstClicked = false;
-      alert('you win');
+      alert(`You win! Time: ${this.formatTime(this.gameTime)}`);
     }
   }
 
-  flag(cell: Cell) {
+  flag(cell: Cell): void {
     if (cell.status !== 'clear') {
       if (cell.status === 'flag') {
         cell.status = 'open';
@@ -55,12 +61,35 @@ export class GameComponent {
     }
   }
 
-  reset() {
+  reset(): void {
     this.board = new Board(20, 30);
-    this.timer.timerReset()
+    this.resetTimer();
+    this.firstClicked = false;
+  }
+
+  startTimer(): void {
+    this.timer?.start();
+  }
+
+  stopTimer(): void {
+    this.timer?.stop();
+  }
+
+  resetTimer(): void {
+    this.timer?.timerReset();
   }
 
   getProximityClass(cell: Cell): string {
     return `proximity-${cell.proximityMines}`;
   }
+
+  onTimerStopped(timeInSeconds: number): void {
+    this.gameTime = timeInSeconds;
+  }
+
+  formatTime(totalSeconds: number): string {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
 }
