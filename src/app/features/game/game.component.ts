@@ -3,6 +3,7 @@ import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { TimerComponent } from "./timer/timer.component";
+import { ConfettiComponent } from '../confetti/confetti.component';
 
 @Component({
   selector: 'app-game',
@@ -11,13 +12,16 @@ import { TimerComponent } from "./timer/timer.component";
     NgFor,
     NgIf,
     NgClass,
-    TimerComponent
+    TimerComponent,
+    ConfettiComponent
 ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
 export class GameComponent implements AfterViewInit {
+  @ViewChild(ConfettiComponent) confettiComponent: ConfettiComponent | undefined;
   @ViewChild(TimerComponent) timer: TimerComponent | undefined;
+  
   firstClicked = false;
   board: Board;
   gameTime: number = 0;
@@ -49,7 +53,7 @@ export class GameComponent implements AfterViewInit {
     else if (result === 'win') {
       this.stopTimer();
       this.firstClicked = false;
-      alert(`You win! Time: ${this.formatTime(this.gameTime)}`);
+      this.launchConfetti();
     }
   }
 
@@ -93,5 +97,9 @@ export class GameComponent implements AfterViewInit {
     const ms = milliseconds % 1000;
 
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
+  }
+
+  launchConfetti() {
+    this.confettiComponent?.launchConfetti();
   }
 }
