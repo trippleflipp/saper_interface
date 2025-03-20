@@ -4,7 +4,7 @@
 
 1. [Node.js](https://nodejs.org/en)
 
-2. Прописываем в терминале:
+2. Прописываем в PowerShell:
 ```bash
 npm install -g @angular/cli
 ```
