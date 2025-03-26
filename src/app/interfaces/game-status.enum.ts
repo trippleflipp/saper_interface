@@ -1,0 +1,1 @@
+export enum GameStatus { init, started, ended };
