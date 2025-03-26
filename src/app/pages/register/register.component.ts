@@ -46,8 +46,7 @@ export class RegisterComponent {
     this.registerForm = this.fb.group({
       "email": ['', [Validators.required, Validators.email]],
       "username": ['', [Validators.required]],
-      "password": ['', [Validators.required, Validators.minLength(6)]],
-      "agreement": [false, Validators.requiredTrue]
+      "password": ['', [Validators.required, Validators.minLength(6)]]
     })
   }
 
