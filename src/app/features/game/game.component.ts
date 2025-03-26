@@ -53,12 +53,10 @@ export class GameComponent implements AfterViewInit {
     const result = this.board.checkCell(cell);
     if (result === 'gameover') {
       this.stopTimer();
-      this.firstClicked = false;
       this.openSnackbar("Вы проиграли!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
     }
     else if (result === 'win') {
       this.stopTimer();
-      this.firstClicked = false;
       this.launchConfetti();
       this.openSnackbar("Победа!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
     }

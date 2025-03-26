@@ -6,10 +6,12 @@
 
         <mat-card-content>
             <form [formGroup]="registerForm">
-                <mat-form-field appearance="outline" class="form-field">
+                
+                <mat-form-field subscriptSizing="dynamic"
+                                appearance="outline" 
+                                class="form-field">
                     <mat-label>Email</mat-label>
                     <input matInput 
-                           placeholder="Email"
                            formControlName="email"
                            required>
                     <mat-error *ngIf="registerForm.controls['email']?.invalid">
@@ -18,10 +20,11 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="form-field">
+                <mat-form-field subscriptSizing="dynamic"
+                                appearance="outline" 
+                                class="form-field">
                     <mat-label>Логин</mat-label>
                     <input matInput
-                           placeholder="Логин"
                            formControlName="username"
                            required>
                     <mat-error *ngIf="registerForm.controls['username']?.invalid">
@@ -29,11 +32,12 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="form-field">
+                <mat-form-field subscriptSizing="dynamic"
+                                appearance="outline" 
+                                class="form-field">
                     <mat-label>Пароль</mat-label>
                     <input matInput 
                            [type]="hidePassword ? 'password' : 'text'"
-                           placeholder="Пароль"
                            formControlName="password">
                     <button mat-icon-button
                             matSuffix
@@ -48,10 +52,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-checkbox class="checkbox"
-                              formControlName="agreement">
-                              Я согласен пожертвовать личными данными на продажу третьим лицам
-                </mat-checkbox>
+                <mat-error class="explanation">* - поле обязательное для заполнения</mat-error>
 
                 <div class="button-row">
                     <button mat-raised-button
