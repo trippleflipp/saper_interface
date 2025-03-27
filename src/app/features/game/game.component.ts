@@ -41,6 +41,7 @@ export class GameComponent {
   }
 
   checkCell(cell: Cell): void {
+    if (this.gameStatus === GameStatus.ended) return;
     this.startGame(cell);
     const result = this.board.checkCell(cell);
     this.winOrGameover(result);

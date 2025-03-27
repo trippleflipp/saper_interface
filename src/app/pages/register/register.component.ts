@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -42,14 +42,25 @@ export class RegisterComponent {
     this.initRegisterForm();
   }
 
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = this.registerForm?.get('password')?.value;
+    const confirmPassword = control.value;
+    
+    if (password !== confirmPassword) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  }
+
   initRegisterForm(): void {
     this.registerForm = this.fb.group({
       "email": ['', [Validators.required, Validators.email]],
       "username": ['', [Validators.required]],
-      "password": ['', [Validators.required, Validators.minLength(6)]]
+      "password": ['', [Validators.required, Validators.minLength(6)]],
+      "confirmPassword": ['', [Validators.required, this.passwordMatchValidator.bind(this)]]
     })
   }
-
+  
   submitRegister(): void {
     this.loading = true;
     const submitForm = new FormGroup({
@@ -60,5 +71,9 @@ export class RegisterComponent {
       console.log(res);
       this.router.navigate(['/login']);
     })
+  }
+
+  redirectToLogin(): void {
+    this.router.navigate(['/login']);
   }
 }

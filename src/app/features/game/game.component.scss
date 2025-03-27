@@ -9,11 +9,37 @@ $flag-color: #fdd835;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  background-color: #f5f5f5;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+}
+
+.game-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.timer {
+  margin-right: 20px;
 }
 
 table {
   border-collapse: collapse;
   margin: 20px;
+  width: fit-content;
+  min-width: 600px;
+  max-width: 1000px;
 }
 
 td {

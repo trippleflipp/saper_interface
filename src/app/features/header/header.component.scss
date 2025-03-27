@@ -1,7 +1,7 @@
 .header-container {
     display: flex;
     align-items: center;
-    background-color: #3498db;
+    background-color: rgb(255, 187, 1);
     height: 46px;
 }
 
@@ -29,5 +29,16 @@
         transform: rotate(
           calc(360deg * var(--rotation-direction))
         );
+    }
+}
+
+.menu-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    
+    &.rotate {
+        transform: rotate(var(--rotation-direction));
     }
 }
