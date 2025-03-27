@@ -52,9 +52,27 @@
                     </mat-error>
                 </mat-form-field>
 
+                <mat-form-field subscriptSizing="dynamic"
+                                appearance="outline" 
+                                class="form-field">
+                    <mat-label>Подтверждение пароля</mat-label>
+                    <input matInput 
+                           [type]="hidePassword ? 'password' : 'text'"
+                           formControlName="confirmPassword">
+                    <mat-error *ngIf="registerForm.controls['confirmPassword']?.invalid">
+                        <span *ngIf="registerForm.controls['confirmPassword']?.errors?.['required']">Подтвердите пароль</span>
+                        <span *ngIf="registerForm.controls['confirmPassword']?.errors?.['passwordMismatch']">Пароли не совпадают</span>
+                    </mat-error>
+                </mat-form-field>
+
                 <mat-error class="explanation">* - поле обязательное для заполнения</mat-error>
 
                 <div class="button-row">
+                    <button mat-button
+                            type="button"
+                            (click)="redirectToLogin()">
+                        Вернуться
+                    </button>
                     <button mat-raised-button
                             color="primary"
                             type="submit"
