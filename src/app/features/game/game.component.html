@@ -3,7 +3,7 @@
 	<div class="game-container">
 		<div class="game-controls">
 			<button (click)="reset()">Перезапустить</button>
-			<app-timer (timerStopped)="onTimerStopped($event)"></app-timer>
+			<app-timer class="timer" (timerStopped)="onTimerStopped($event)"></app-timer>
 		</div>
 		<table>
 			<tr *ngFor="let row of board.cells; index as y">

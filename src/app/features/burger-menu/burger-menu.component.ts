@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RulesDialogComponent } from '../rules-dialog/rules-dialog.component';
 
@@ -13,6 +13,10 @@ export class BurgerMenuComponent {
   isOpen: boolean = false;
   close = new EventEmitter<void>();
 
+  constructor(
+    private dialog: MatDialog
+  ) {}
+
   toggleMenu() {
     this.isOpen = !this.isOpen
   }
@@ -24,15 +28,9 @@ export class BurgerMenuComponent {
   openRules() {
     this.dialog.open(RulesDialogComponent, {
       width: '50vw',
-      height: '80vh',
       maxWidth: '90vw',
       maxHeight: '90vh'
     });
     this.closeMenu();
   }
-
-  constructor(
-    private eRef: ElementRef,
-    private dialog: MatDialog
-  ) {}
 }
