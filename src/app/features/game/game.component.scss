@@ -1,4 +1,3 @@
-$cell-size: 30px;
 $border-color: #888;
 $shadow-color: #bbb;
 $highlight-color: #fff;
@@ -20,7 +19,8 @@ $flag-color: #fdd835;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: fit-content;
+  width: 705px;
+  padding: 20px;
 }
 
 .game-controls {
@@ -28,6 +28,31 @@ $flag-color: #fdd835;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
+
+.difficulty-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.difficulty-controls button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 0;
+
+  &:hover {
+    background-color: #d0d0d0;
+  }
+
+  &.active {
+    background-color: #4CAF50;
+    color: white;
+  }
 }
 
 .timer {
@@ -38,13 +63,12 @@ table {
   border-collapse: collapse;
   margin: 20px;
   width: fit-content;
-  min-width: 600px;
-  max-width: 1000px;
 }
 
 td {
-  width: $cell-size;
-  height: $cell-size;
+  aspect-ratio: 1;
+  width: 35px;
+  height: 35px;
   border: 2px solid $border-color;
   background-color: #ddd;
   text-align: center;
@@ -74,8 +98,8 @@ td {
     
 
     svg {
-      width: $cell-size - 6px;
-      height: $cell-size - 6px;
+      width: 80%;
+      height: 80%;
       margin: auto;
     }
   }
@@ -85,8 +109,8 @@ td {
     cursor: default;
 
     svg {
-      width: $cell-size - 6px;
-      height: $cell-size - 6px;
+      width: 80%;
+      height: 80%;
       margin: auto;
       fill: #fff;
     }
@@ -129,7 +153,6 @@ button {
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  margin: 20px;
 
   &:hover {
     background-color: #3e8e41;
@@ -137,7 +160,45 @@ button {
 }
 
 svg {
-  width: $cell-size - 6px;
-  height: $cell-size - 6px;
+  width: 80%;
+  height: 80%;
   margin: auto;
+}
+
+.game-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.flag-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-width: 80px;
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  span {
+    min-width: 24px;
+    text-align: right;
+  }
+}
+
+.difficulty-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.difficulty-label {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
 }
