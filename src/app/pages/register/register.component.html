@@ -16,7 +16,7 @@
                            required>
                     <mat-error *ngIf="registerForm.controls['email']?.invalid">
                         <span *ngIf="registerForm.controls['email']?.errors?.['required']">Введите почту</span>
-                        <span *ngIf="registerForm.controls['email']?.errors?.['email']">Придумайте почту, похожую на настоящую</span>
+                        <span *ngIf="registerForm.controls['email']?.errors?.['email']">Некорректная почта</span>
                     </mat-error>
                 </mat-form-field>
 
@@ -78,7 +78,7 @@
                             type="submit"
                             (click)="submitRegister()"
                             [disabled]="registerForm.invalid">
-                        <span>Зарегистрироваться</span>
+                        <span *ngIf="!loading">Зарегистрироваться</span>
                         <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
                     </button>
                 </div>

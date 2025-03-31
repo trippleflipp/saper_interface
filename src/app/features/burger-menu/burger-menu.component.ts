@@ -2,12 +2,14 @@ import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RulesDialogComponent } from '../rules-dialog/rules-dialog.component';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-burger-menu',
   standalone: true,
   imports: [
-
+    MatIconModule
   ],
   templateUrl: './burger-menu.component.html',
   styleUrl: './burger-menu.component.scss'
@@ -18,7 +20,8 @@ export class BurgerMenuComponent {
 
   constructor(
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   toggleMenu() {
@@ -43,5 +46,10 @@ export class BurgerMenuComponent {
       maxWidth: '90vw',
       maxHeight: '90vh'
     });
+  }
+
+  logout () {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

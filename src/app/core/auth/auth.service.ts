@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { catchError, tap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../../features/snackbar/snackbar.component';
+import { SnackbarData } from '../../interfaces/snackbardata.model';
 
 interface LoginResponse {
   access_token: string;
@@ -18,14 +22,25 @@ export class AuthService {
   private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
   public userRole$ = this.userRoleSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) { }
 
   login(credentials: any): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, credentials);
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, credentials).pipe(
+      tap(response => {
+        this.setToken(response.access_token);
+      }),
+      catchError(this.handleError)
+    );
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, userData);
+    return this.http.post(`${this.baseUrl}/register`, userData).pipe(
+      catchError(this.handleError)
+    );
   }
 
   logout(): void {
@@ -57,13 +72,16 @@ export class AuthService {
         return payload.role || null;
       } catch (error) {
         console.error('Error decoding token:', error);
+        return null;
       }
     }
     return null;
   }
 
   getProtectedData(): Observable<any> {
-      return this.http.get(`${this.baseUrl}/protected`);
+    return this.http.get(`${this.baseUrl}/protected`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   navigate(): void {
@@ -74,7 +92,35 @@ export class AuthService {
       this.router.navigate(['/home']);
     } else {
       this.router.navigate(['/login']);
-      console.error('Unknown role, navigating to /login');
     }
   }
+
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
+    let errorMessage = "Неизвестная ошибка!";
+    switch (true) {
+      case error.error.message === "Username already exists":
+        errorMessage = "Пользователь с таким именем уже есть!";
+        break;
+      case error.status === 401:
+        errorMessage = "Проверьте вводимые данные";
+        break;
+      default:
+        break;
+    }
+    this.openSnackBar("Ошибка!", errorMessage, 4000);
+    return throwError(() => error);
+  }
+
+  openSnackBar(title: string, message: string, duration: number): void {
+      const data: SnackbarData = {
+        title: title,
+        message: message,
+        duration: duration,
+        button: null
+      }
+      this.snackBar.openFromComponent(SnackbarComponent, {
+        data: data,
+        duration: undefined
+      });
+    }
 }

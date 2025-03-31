@@ -67,10 +67,16 @@ export class RegisterComponent {
       "username": this.registerForm.controls['username'],
       "password": this.registerForm.controls['password']
     })
-    this.authService.register(submitForm.value).subscribe((res) => {
-      console.log(res);
-      this.router.navigate(['/login']);
-    })
+    this.authService.register(submitForm.value).subscribe(
+      (res) => {
+        console.log(res);
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        this.initRegisterForm();
+        this.loading = false;
+      }
+    )
   }
 
   redirectToLogin(): void {
