@@ -6,6 +6,7 @@ import { AuthGuard } from './core/auth/auth.guard';
 import { AdminComponent } from './pages/admin/admin.component';
 import { RoleGuard } from './core/auth/role.guard';
 import { GuestComponent } from './pages/guest/guest.component';
+import { LeaderTableComponent } from './pages/leader-table/leader-table.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -24,6 +25,10 @@ export const routes: Routes = [
     {
         path: 'guest', 
         component: GuestComponent, 
+    },
+    {
+        path: 'leader_table',
+        component: LeaderTableComponent,
     },
     { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];
