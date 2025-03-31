@@ -2,8 +2,24 @@
 <div class="wrapper">
 	<div class="game-container">
 		<div class="game-controls">
+			<div class="difficulty-section">
+				<span class="difficulty-label">Уровень</span>
+				<div class="difficulty-controls">
+					<button [class.active]="currentDifficulty === GameDifficulty.easy" (click)="setDifficulty(GameDifficulty.easy)">Легкий</button>
+					<button [class.active]="currentDifficulty === GameDifficulty.medium" (click)="setDifficulty(GameDifficulty.medium)">Средний</button>
+					<button [class.active]="currentDifficulty === GameDifficulty.hard" (click)="setDifficulty(GameDifficulty.hard)">Сложный</button>
+				</div>
+			</div>
+			<div class="game-info">
+				<div class="flag-counter">
+					<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+						<path fill="#000000" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" />
+					</svg>
+					<span>{{ remainingFlags }}</span>
+				</div>
+				<app-timer class="timer" (timerStopped)="onTimerStopped($event)"></app-timer>
+			</div>
 			<button (click)="reset()">Перезапустить</button>
-			<app-timer class="timer" (timerStopped)="onTimerStopped($event)"></app-timer>
 		</div>
 		<table>
 			<tr *ngFor="let row of board.cells; index as y">
