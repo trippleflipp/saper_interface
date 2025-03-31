@@ -7,7 +7,7 @@ import { ConfettiComponent } from '../confetti/confetti.component';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarData } from '../../interfaces/snackbardata.model';
-import { GameStatus } from '../../interfaces/game-status.enum';
+import { GameStatus, GameDifficulty } from '../../interfaces/game-status.enum';
 
 @Component({
   selector: 'app-game',
@@ -31,13 +31,31 @@ export class GameComponent {
   gameStatus: GameStatus = GameStatus.init;
   board: Board;
   gameTime: number = 0;
-  boardSize: number = 20;
-  mineCount: number = 30;
+  currentDifficulty: GameDifficulty = GameDifficulty.medium;
+  GameDifficulty = GameDifficulty;
+  remainingFlags: number;
+  
+  private readonly difficultySettings = {
+    [GameDifficulty.easy]: { size: 9, mines: 8 },
+    [GameDifficulty.medium]: { size: 12, mines: 20 },
+    [GameDifficulty.hard]: { size: 16, mines: 40 }
+  };
 
   constructor(
     private snackBar: MatSnackBar
   ) {
-    this.board = new Board(this.boardSize, this.mineCount);
+    this.initializeBoard();
+  }
+
+  private initializeBoard(): void {
+    const settings = this.difficultySettings[this.currentDifficulty];
+    this.board = new Board(settings.size, settings.mines);
+    this.remainingFlags = settings.mines;
+  }
+
+  setDifficulty(difficulty: GameDifficulty): void {
+    this.currentDifficulty = difficulty;
+    this.reset();
   }
 
   checkCell(cell: Cell): void {
@@ -72,14 +90,19 @@ export class GameComponent {
   flag(cell: Cell): void {
     if (this.gameStatus === GameStatus.started) {
       if (cell.status !== 'clear') {
-        cell.status = cell.status === 'flag' ? 'open' : 'flag';
+        const newStatus = cell.status === 'flag' ? 'open' : 'flag';
+        if (newStatus === 'flag' && this.remainingFlags === 0) {
+          return; // Нельзя поставить флажок, если их не осталось
+        }
+        cell.status = newStatus;
+        this.remainingFlags += cell.status === 'flag' ? -1 : 1;
       }
     }
   }
 
   reset(): void {
-    this.gameStatus = GameStatus.init
-    this.board = new Board(this.boardSize, this.mineCount);
+    this.gameStatus = GameStatus.init;
+    this.initializeBoard();
     this.timer.timerReset();
     this.firstClicked = false;
   }
