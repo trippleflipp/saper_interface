@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild, } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, Output, ViewChild, } from '@angular/core';
 import { BurgerMenuComponent } from '../burger-menu/burger-menu.component';
 
 @Component({
@@ -19,7 +19,7 @@ export class HeaderComponent {
     private el: ElementRef
   ) {}
 
-  rotateSvg() {
+  @Input() rotateSvg() {
     this.isRotated = !this.isRotated;
     if (this.isRotated) {
       setTimeout(() => {
