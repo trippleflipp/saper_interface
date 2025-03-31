@@ -36,9 +36,9 @@ export class GameComponent {
   remainingFlags: number;
   
   private readonly difficultySettings = {
-    [GameDifficulty.easy]: { size: 9, mines: 10 },
-    [GameDifficulty.medium]: { size: 16, mines: 40 },
-    [GameDifficulty.hard]: { size: 20, mines: 60 }
+    [GameDifficulty.easy]: { size: 9, mines: 8 },
+    [GameDifficulty.medium]: { size: 12, mines: 20 },
+    [GameDifficulty.hard]: { size: 16, mines: 40 }
   };
 
   constructor(

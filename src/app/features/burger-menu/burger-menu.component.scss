@@ -1,7 +1,7 @@
 .burger-menu {
     user-select: none; 
     position: fixed;
-    top: 46px; /* Высота header */
+    top: 46px;
     left: 0;
     width: 250px;
     height: 100%;
@@ -9,7 +9,7 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transform: translateX(-100%);
     transition: transform 0.2s ease-out;
-    z-index: 1000; /* Убедитесь, что меню поверх других элементов */
+    z-index: 1000;
 }
 
 .burger-menu.open {

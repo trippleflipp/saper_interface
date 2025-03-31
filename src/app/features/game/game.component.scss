@@ -19,7 +19,7 @@ $flag-color: #fdd835;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: fit-content;
+  width: 705px;
   padding: 20px;
 }
 
@@ -28,7 +28,6 @@ $flag-color: #fdd835;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 10px;
 }
 
 .difficulty-controls {
@@ -154,7 +153,6 @@ button {
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  margin: 20px;
 
   &:hover {
     background-color: #3e8e41;
