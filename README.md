@@ -1,4 +1,4 @@
-# KazikInterface
+# saper_interface
 
 ## Установка необходимых компонентов и зависимостей
 
@@ -13,11 +13,11 @@ npm install -g @angular/cli
 
 1. Клонируем репозиторий:
 ```bash
-git clone https://github.com/trippleflipp/kazik_interface.git
+git clone https://github.com/trippleflipp/saper_interface.git
 ```
 2. Заходим в папку с проектом:
 ```bash
-cd kazik_interface
+cd saper_interface
 ```
 3. Устанавливаем библиотеки:
 ```bash
