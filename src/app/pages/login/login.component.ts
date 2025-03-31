@@ -59,10 +59,16 @@ export class LoginComponent implements OnInit {
 
   submitLogin(): void {
     this.loading = true;
-    this.authService.login(this.loginForm.value).subscribe((res) => {
-      this.authService.setToken(res.access_token);
-      this.authService.navigate();
-    })
+    this.authService.login(this.loginForm.value).subscribe(
+      (res) => {
+        this.authService.setToken(res.access_token);
+        this.authService.navigate();
+      },
+      (error) => {
+        this.initLoginForm();
+        this.loading = false;
+      }
+    )
   }
 
   signInAsGuest(): void {
