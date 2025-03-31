@@ -1,4 +1,4 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RulesDialogComponent } from '../rules-dialog/rules-dialog.component';
 
@@ -31,6 +31,5 @@ export class BurgerMenuComponent {
       maxWidth: '90vw',
       maxHeight: '90vh'
     });
-    this.closeMenu();
   }
 }
