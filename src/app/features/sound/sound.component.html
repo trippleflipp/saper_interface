@@ -1,0 +1,18 @@
+<div class="sound-control"
+     (mouseenter)="showMusicSlider = true"
+     (mouseleave)="showMusicSlider = false">
+    <mat-icon>{{ soundService.musicVolume > 0 ? 'music_note' : 'music_off' }}</mat-icon>
+    <span *ngIf="!showMusicSlider">{{ soundService.musicVolume > 0 ? 'Музыка включена' : 'Музыка выключена' }}</span>
+    <mat-slider *ngIf="showMusicSlider" min="0" max="1" step="0.01">
+        <input matSliderThumb [value]="soundService.musicVolume" (dragEnd)="onMusicSliderChange($event)">
+    </mat-slider>
+</div>
+<div class="sound-control"
+     (mouseenter)="showSoundSlider = true"
+     (mouseleave)="showSoundSlider = false">
+    <mat-icon>{{ soundService.soundVolume > 0 ? 'volume_up' : 'volume_off' }}</mat-icon>
+    <span *ngIf="!showSoundSlider">{{ soundService.soundVolume > 0 ? 'Звук включен' : 'Звук выключен' }}</span>
+    <mat-slider *ngIf="showSoundSlider" min="0" max="1" step="0.01">
+        <input matSliderThumb [value]="soundService.soundVolume" (dragEnd)="onSoundSliderChange($event)">
+    </mat-slider>
+</div>

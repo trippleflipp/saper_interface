@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -8,6 +8,12 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarData } from '../../interfaces/snackbardata.model';
 import { GameStatus, GameDifficulty } from '../../interfaces/game-status.enum';
+import { SoundService } from '../../core/services/sound.service';
+
+interface DifficultySettings {
+  size: number;
+  mines: number;
+}
 
 @Component({
   selector: 'app-game',
@@ -18,34 +24,43 @@ import { GameStatus, GameDifficulty } from '../../interfaces/game-status.enum';
     NgClass,
     TimerComponent,
     ConfettiComponent,
-    MatSnackBarModule
-],
+    MatSnackBarModule,
+  ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-export class GameComponent {
-  @ViewChild(ConfettiComponent) confettiComponent: ConfettiComponent;
-  @ViewChild(TimerComponent) timer: TimerComponent;
+export class GameComponent implements OnInit, OnDestroy {
+  @ViewChild(ConfettiComponent) confettiComponent!: ConfettiComponent;
+  @ViewChild(TimerComponent) timer!: TimerComponent;
   
   firstClicked = false;
   gameStatus: GameStatus = GameStatus.init;
-  board: Board;
-  gameTime: number = 0;
+  board!: Board;
+  gameTime = 0;
   currentDifficulty: GameDifficulty = GameDifficulty.medium;
   GameDifficulty = GameDifficulty;
-  remainingFlags: number;
+  remainingFlags = 0;
   isGameOver = false;
   
-  private readonly difficultySettings = {
+  private readonly difficultySettings: Record<GameDifficulty, DifficultySettings> = {
     [GameDifficulty.easy]: { size: 9, mines: 8 },
     [GameDifficulty.medium]: { size: 12, mines: 20 },
     [GameDifficulty.hard]: { size: 16, mines: 40 }
   };
 
   constructor(
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private soundService: SoundService
   ) {
     this.initializeBoard();
+  }
+
+  ngOnInit(): void {
+    this.soundService.setGameActive(true);
+  }
+
+  ngOnDestroy(): void {
+    this.soundService.setGameActive(false);
   }
 
   private initializeBoard(): void {
@@ -57,50 +72,79 @@ export class GameComponent {
   setDifficulty(difficulty: GameDifficulty): void {
     this.currentDifficulty = difficulty;
     this.reset();
+    this.soundService.checkGameInteraction();
   }
 
   checkCell(cell: Cell): void {
     if (this.gameStatus === GameStatus.ended) return;
+    
     this.startGame(cell);
     const result = this.board.checkCell(cell);
     this.winOrGameover(result);
+    this.soundService.checkGameInteraction();
   }
 
   startGame(cell: Cell): void {
     if (this.gameStatus === GameStatus.init) {
-      this.gameStatus = GameStatus.started
+      this.gameStatus = GameStatus.started;
       this.board.generateBoard(cell.row, cell.column);
       this.timer.start();
+      this.soundService.checkGameInteraction();
     }
   }
 
-  winOrGameover(result: "gameover" | "win" | undefined) {
+  private winOrGameover(result: "gameover" | "win" | undefined): void {
     if (result === 'gameover') {
-      this.gameStatus = GameStatus.ended;
-      this.isGameOver = true;
-      this.timer.stop();
-      this.openSnackbar("На одного сталкера в Зоне стало меньше...", `Время: ${this.formatTime(this.gameTime)}`, 4000);
+      this.handleGameOver();
+    } else if (result === 'win') {
+      this.handleWin();
     }
-    else if (result === 'win') {
-      this.gameStatus = GameStatus.ended;
+  }
+
+  private handleGameOver(): void {
+    this.gameStatus = GameStatus.ended;
+    this.isGameOver = true;
+    this.timer.stop();
+    
+    this.openSnackbar(
+      "На одного сталкера в Зоне стало меньше...", 
+      `Время: ${this.formatTime(this.gameTime)}`, 
+      4000
+    );
+    
+    this.soundService.stopBackgroundMusic();
+    this.soundService.playSound("fail-wha-wha");
+    
+    setTimeout(() => {
       this.isGameOver = false;
-      this.timer.stop();
-      this.confettiComponent.launchConfetti();
-      this.openSnackbar("Победа! Вы нашли артефакт!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
-    }
+      this.soundService.startBackgroundMusic();
+    }, 4000);
+  }
+
+  private handleWin(): void {
+    this.gameStatus = GameStatus.ended;
+    this.isGameOver = false;
+    this.timer.stop();
+    
+    this.confettiComponent.launchConfetti();
+    this.openSnackbar(
+      "Победа! Вы нашли артефакт!", 
+      `Время: ${this.formatTime(this.gameTime)}`, 
+      4000
+    );
+    
+    this.soundService.playSound("win");
   }
 
   flag(cell: Cell): void {
-    if (this.gameStatus === GameStatus.started) {
-      if (cell.status !== 'clear') {
-        const newStatus = cell.status === 'flag' ? 'open' : 'flag';
-        if (newStatus === 'flag' && this.remainingFlags === 0) {
-          return; // Нельзя поставить флажок, если их не осталось
-        }
-        cell.status = newStatus;
-        this.remainingFlags += cell.status === 'flag' ? -1 : 1;
-      }
-    }
+    if (this.gameStatus !== GameStatus.started || cell.status === 'clear') return;
+
+    const newStatus = cell.status === 'flag' ? 'open' : 'flag';
+    if (newStatus === 'flag' && this.remainingFlags === 0) return;
+
+    cell.status = newStatus;
+    this.remainingFlags += cell.status === 'flag' ? -1 : 1;
+    this.soundService.checkGameInteraction();
   }
 
   reset(): void {
@@ -109,6 +153,7 @@ export class GameComponent {
     this.initializeBoard();
     this.timer.timerReset();
     this.firstClicked = false;
+    this.soundService.checkGameInteraction();
   }
 
   getProximityClass(cell: Cell): string {
@@ -127,15 +172,16 @@ export class GameComponent {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
   }
 
-  openSnackbar(title: string, message: string, duration: number): void {
+  private openSnackbar(title: string, message: string, duration: number): void {
     const data: SnackbarData = {
-      title: title,
-      message: message,
-      duration: duration,
+      title,
+      message,
+      duration,
       button: null
-    }
+    };
+    
     this.snackBar.openFromComponent(SnackbarComponent, {
-      data: data,
+      data,
       duration: undefined
     });
   }
