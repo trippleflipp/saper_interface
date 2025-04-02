@@ -1,5 +1,7 @@
+<div class="blackout" [class.active]="isOpen" (click)="closeMenu()"></div>
 <div class="burger-menu" [class.open]="isOpen">
     <div class="menu-content">
+      
       <ul>
         <li><a>Профиль</a></li>
         <li><a (click)="openGame()">Играть</a></li>
@@ -10,5 +12,8 @@
           <a (click)="logout()">Выйти из аккаунта</a>
         </li>
       </ul>
+      <div class="sound-controls">
+        <app-sound></app-sound>
+      </div>
     </div>
   </div>

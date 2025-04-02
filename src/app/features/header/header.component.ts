@@ -15,11 +15,7 @@ export class HeaderComponent {
   isRotated: boolean = false;
   rotationDirection: number = -1;
 
-  constructor(
-    private el: ElementRef
-  ) {}
-
-  @Input() rotateSvg() {
+  rotateSvg() {
     this.isRotated = !this.isRotated;
     if (this.isRotated) {
       setTimeout(() => {
@@ -31,13 +27,5 @@ export class HeaderComponent {
 
   getRotationDirection(): number {
     return this.rotationDirection;
-  }
-
-  @HostListener('document:mousedown', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    if (!this.el.nativeElement.contains(event.target) && this.burgerMenu.isOpen) {
-      this.burgerMenu.closeMenu();
-      this.rotateSvg();
-    }
   }
 }
