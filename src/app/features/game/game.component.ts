@@ -34,6 +34,7 @@ export class GameComponent {
   currentDifficulty: GameDifficulty = GameDifficulty.medium;
   GameDifficulty = GameDifficulty;
   remainingFlags: number;
+  isGameOver = false;
   
   private readonly difficultySettings = {
     [GameDifficulty.easy]: { size: 9, mines: 8 },
@@ -76,14 +77,16 @@ export class GameComponent {
   winOrGameover(result: "gameover" | "win" | undefined) {
     if (result === 'gameover') {
       this.gameStatus = GameStatus.ended;
+      this.isGameOver = true;
       this.timer.stop();
-      this.openSnackbar("Вы проиграли!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
+      this.openSnackbar("На одного сталкера в Зоне стало меньше...", `Время: ${this.formatTime(this.gameTime)}`, 4000);
     }
     else if (result === 'win') {
       this.gameStatus = GameStatus.ended;
+      this.isGameOver = false;
       this.timer.stop();
       this.confettiComponent.launchConfetti();
-      this.openSnackbar("Победа!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
+      this.openSnackbar("Победа! Вы нашли артефакт!", `Время: ${this.formatTime(this.gameTime)}`, 4000);
     }
   }
 
@@ -102,6 +105,7 @@ export class GameComponent {
 
   reset(): void {
     this.gameStatus = GameStatus.init;
+    this.isGameOver = false;
     this.initializeBoard();
     this.timer.timerReset();
     this.firstClicked = false;

@@ -59,6 +59,13 @@
                     <input matInput 
                            [type]="hidePassword ? 'password' : 'text'"
                            formControlName="confirmPassword">
+                    <button mat-icon-button
+                            matSuffix
+                            (click)="hidePassword = !hidePassword"
+                            [ariaLabel]="'Hide password'"
+                            [ariaPressed]="hidePassword">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
                     <mat-error *ngIf="registerForm.controls['confirmPassword']?.invalid">
                         <span *ngIf="registerForm.controls['confirmPassword']?.errors?.['required']">Подтвердите пароль</span>
                         <span *ngIf="registerForm.controls['confirmPassword']?.errors?.['passwordMismatch']">Пароли не совпадают</span>

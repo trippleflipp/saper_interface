@@ -1,5 +1,16 @@
+<div class="blackout" [class.active]="isOpen" (click)="closeMenu()"></div>
 <div class="burger-menu" [class.open]="isOpen">
     <div class="menu-content">
+      <div class="sound-controls">
+        <div class="sound-control" (click)="toggleMusic()">
+          <mat-icon>{{ isMusicEnabled ? 'music_note' : 'music_off' }}</mat-icon>
+          <span>{{ isMusicEnabled ? 'Музыка включена' : 'Музыка выключена' }}</span>
+        </div>
+        <div class="sound-control" (click)="toggleSound()">
+          <mat-icon>{{ isSoundEnabled ? 'volume_up' : 'volume_off' }}</mat-icon>
+          <span>{{ isSoundEnabled ? 'Звук включен' : 'Звук выключен' }}</span>
+        </div>
+      </div>
       <ul>
         <li><a>Профиль</a></li>
         <li><a (click)="openGame()">Играть</a></li>

@@ -4,6 +4,7 @@ import { RulesDialogComponent } from '../rules-dialog/rules-dialog.component';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/auth/auth.service';
+import { SoundService } from '../../services/sound_service';
 
 @Component({
   selector: 'app-burger-menu',
@@ -16,13 +17,23 @@ import { AuthService } from '../../core/auth/auth.service';
 })
 export class BurgerMenuComponent {
   isOpen: boolean = false;
+  isMusicEnabled = false;
+  isSoundEnabled = false;
   close = new EventEmitter<void>();
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private soundService: SoundService
+  ) {
+    this.soundService.isMusicEnabled$.subscribe((enabled: boolean) => {
+      this.isMusicEnabled = enabled;
+    });
+    this.soundService.isSoundEnabled$.subscribe((enabled: boolean) => {
+      this.isSoundEnabled = enabled;
+    });
+  }
 
   toggleMenu() {
     this.isOpen = !this.isOpen
@@ -46,6 +57,14 @@ export class BurgerMenuComponent {
       maxWidth: '90vw',
       maxHeight: '90vh'
     });
+  }
+
+  toggleMusic(): void {
+    this.soundService.toggleMusic();
+  }
+
+  toggleSound(): void {
+    this.soundService.toggleSound();
   }
 
   logout () {
