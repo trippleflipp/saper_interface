@@ -65,18 +65,20 @@ export class RegisterComponent {
     this.loading = true;
     const submitForm = new FormGroup({
       "username": this.registerForm.controls['username'],
-      "password": this.registerForm.controls['password']
-    })
+      "password": this.registerForm.controls['password'],
+      "email": this.registerForm.controls['email']
+    });
+
     this.authService.register(submitForm.value).subscribe(
-      (res) => {
-        console.log(res);
-        this.router.navigate(['/login']);
+      (response) => {
+        // No need to navigate to login, user is already authenticated after registration
+        this.router.navigate(['/home']);
       },
       (error) => {
         this.initRegisterForm();
         this.loading = false;
       }
-    )
+    );
   }
 
   redirectToLogin(): void {

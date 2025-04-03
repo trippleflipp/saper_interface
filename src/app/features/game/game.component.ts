@@ -6,9 +6,15 @@ import { TimerComponent } from "./timer/timer.component";
 import { ConfettiComponent } from '../confetti/confetti.component';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 import { SnackbarData } from '../../interfaces/snackbardata.model';
 import { GameStatus, GameDifficulty } from '../../interfaces/game-status.enum';
 import { SoundService } from '../../core/services/sound.service';
+import { CoinsService } from '../../core/services/coins.service';
+import { AuthService } from '../../core/services/auth.service';
 
 interface DifficultySettings {
   size: number;
@@ -25,6 +31,9 @@ interface DifficultySettings {
     TimerComponent,
     ConfettiComponent,
     MatSnackBarModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatDialogModule,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
@@ -39,8 +48,11 @@ export class GameComponent implements OnInit, OnDestroy {
   gameTime = 0;
   currentDifficulty: GameDifficulty = GameDifficulty.medium;
   GameDifficulty = GameDifficulty;
+  GameStatus = GameStatus;
   remainingFlags = 0;
   isGameOver = false;
+  userCoins = 0;
+  readonly HINT_COST = 10;
   
   private readonly difficultySettings: Record<GameDifficulty, DifficultySettings> = {
     [GameDifficulty.easy]: { size: 9, mines: 8 },
@@ -50,9 +62,16 @@ export class GameComponent implements OnInit, OnDestroy {
 
   constructor(
     private snackBar: MatSnackBar,
-    private soundService: SoundService
+    private dialog: MatDialog,
+    private soundService: SoundService,
+    private coinsService: CoinsService,
+    private authService: AuthService
   ) {
     this.initializeBoard();
+    this.userCoins = this.coinsService.getCurrentCoins();
+    this.coinsService.coins$.subscribe(coins => {
+      this.userCoins = coins;
+    });
   }
 
   ngOnInit(): void {
@@ -126,10 +145,13 @@ export class GameComponent implements OnInit, OnDestroy {
     this.isGameOver = false;
     this.timer.stop();
     
+    // Add coins for winning
+    this.coinsService.addCoins(15);
+    
     this.confettiComponent.launchConfetti();
     this.openSnackbar(
       "Победа! Вы нашли артефакт!", 
-      `Время: ${this.formatTime(this.gameTime)}`, 
+      `Время: ${this.formatTime(this.gameTime)} | +15 монет`, 
       4000
     );
     
@@ -185,4 +207,87 @@ export class GameComponent implements OnInit, OnDestroy {
       duration: undefined
     });
   }
+
+  useHint(): void {
+    if (this.gameStatus !== GameStatus.started || !this.coinsService.useCoins(this.HINT_COST)) {
+      this.openSnackbar(
+        "Недостаточно монет", 
+        `Для подсказки нужно ${this.HINT_COST} монет`, 
+        2000
+      );
+      return;
+    }
+
+    // Find a safe cell that hasn't been revealed yet
+    const hint = this.board.getHint();
+    if (hint) {
+      // Save original status to restore after animation
+      const originalStatus = hint.status;
+      // Show hint animation
+      hint.status = 'hint';
+      
+      // Reset cell status after animation
+      setTimeout(() => {
+        if (hint.status === 'hint') { // Only reset if it wasn't clicked during animation
+          hint.status = originalStatus;
+        }
+      }, 3000); // 3000ms = 2 iterations of 1.5s animation
+    } else {
+      // Refund coins if no hint available
+      this.coinsService.addCoins(this.HINT_COST);
+      this.openSnackbar(
+        "Нет доступных подсказок", 
+        "Все безопасные клетки уже открыты", 
+        2000
+      );
+    }
+  }
+
+  showHintInfo(): void {
+    const dialogRef = this.dialog.open(HintInfoDialogComponent, {
+      width: '400px',
+      panelClass: 'hint-info-dialog'
+    });
+  }
+}
+
+@Component({
+  selector: 'app-hint-info-dialog',
+  template: `
+    <h2 mat-dialog-title>Как работает подсказка?</h2>
+    <mat-dialog-content>
+      <p>Подсказка поможет вам найти безопасную клетку на игровом поле.</p>
+      <ul>
+        <li>Стоимость одной подсказки: {{ HINT_COST }} монет</li>
+        <li>При использовании подсказки, безопасная клетка будет подсвечена зеленым цветом на 3 секунды</li>
+        <li>Подсказка гарантированно указывает на клетку без мины</li>
+      </ul>
+      <p><strong>Примечание:</strong> Подсказка доступна только во время игры и при наличии достаточного количества монет.</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Понятно</button>
+    </mat-dialog-actions>
+  `,
+  styles: [`
+    mat-dialog-content {
+      padding: 20px;
+      
+      ul {
+        padding-left: 20px;
+        margin: 16px 0;
+      }
+      
+      li {
+        margin-bottom: 8px;
+      }
+    }
+  `],
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatButtonModule,
+  ]
+})
+export class HintInfoDialogComponent {
+  readonly HINT_COST = 10;
 }

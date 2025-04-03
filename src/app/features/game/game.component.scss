@@ -1,183 +1,123 @@
-$border-color: #888;
-$shadow-color: #bbb;
+$primary-color: #4CAF50;
+$primary-hover: #3e8e41;
+$border-color: #e0e0e0;
+$shadow-color: rgba(0, 0, 0, 0.1);
 $highlight-color: #fff;
 $mine-color: #d32f2f;
 $flag-color: #fdd835;
+$text-color: #2c3e50;
+$background-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+
+@mixin card-shadow {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
+              0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+@mixin button-style {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
 
 .wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 93%;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f0f2f5;
 }
 
 .game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.3);
-  width: 705px;
-  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  max-height: calc(100vh - 40px);
+  overflow: auto;
 }
 
 .game-controls {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 20px;
   width: 100%;
+  margin-bottom: 20px;
+}
+
+.difficulty-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.difficulty-label {
+  font-size: 1.1rem;
+  color: $text-color;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .difficulty-controls {
   display: flex;
-  gap: 10px;
-}
+  gap: 12px;
 
-.difficulty-controls button {
-  padding: 8px 16px;
-  font-size: 1rem;
-  background-color: #e0e0e0;
-  color: #333;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  margin: 0;
+  button {
+    @include button-style;
+    background-color: #f5f5f5;
+    color: $text-color;
+    min-width: 100px;
 
-  &:hover {
-    background-color: #d0d0d0;
-  }
-
-  &.active {
-    background-color: #4CAF50;
-    color: white;
-  }
-}
-
-.timer {
-  margin-right: 20px;
-}
-
-table {
-  border-collapse: collapse;
-  margin: 20px;
-  width: fit-content;
-}
-
-td {
-  aspect-ratio: 1;
-  width: 35px;
-  height: 35px;
-  border: 2px solid $border-color;
-  background-color: #ddd;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: bold;
-  user-select: none;
-  cursor: pointer;
-  position: relative;
-
-  &:active {
-    background-color: #eee;
-  }
-
-  box-shadow: 2px 2px 5px $shadow-color,
-              -2px -2px 5px $highlight-color;
-
-  &[data-status='clear'] {
-    background-color: #fff;
-    box-shadow: none;
-    border: 1px solid #ccc;
-    cursor: default;
-  }
-
-  &[data-status='flag'] {
-    background-color: #ddd;
-    cursor: pointer;
-    
-
-    svg {
-      width: 80%;
-      height: 80%;
-      margin: auto;
+    &.active {
+      background-color: $primary-color;
+      color: white;
     }
   }
-
-  &[data-status='mine'] {
-    background-color: $mine-color;
-    cursor: default;
-
-    svg {
-      width: 80%;
-      height: 80%;
-      margin: auto;
-      fill: #fff;
-    }
-  }
-
-  div {
-    display: flex;
-    align-self: center;
-    width: fit-content;
-    margin: auto;
-    &.proximity-1 { color: blue; }
-    &.proximity-2 { color: green; }
-    &.proximity-3 { color: red; }
-    &.proximity-4 { color: purple; }
-    &.proximity-5 { color: maroon; }
-    &.proximity-6 { color: turquoise; }
-    &.proximity-7 { color: black; }
-    &.proximity-8 { color: gray; }
-    &.proximity-0 {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: transparent;
-
-      &::before {
-        content: '';
-        width: 80%;
-        height: 80%;
-        border-radius: 50%;
-      }
-    }
-  }
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-
-  &:hover {
-    background-color: #3e8e41;
-  }
-}
-
-svg {
-  width: 80%;
-  height: 80%;
-  margin: auto;
 }
 
 .game-info {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
+  padding: 16px;
+  background: rgba(245, 247, 250, 0.8);
+  border-radius: 12px;
+  margin: 0 auto;
 }
 
-.flag-counter {
+.coins-counter, .flag-counter {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  min-width: 80px;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
   
   svg {
     width: 24px;
@@ -190,17 +130,124 @@ svg {
   }
 }
 
-.difficulty-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+.coins-counter {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  color: #b8860b;
+  
+  svg path {
+    fill: #ffd700;
+  }
 }
 
-.difficulty-label {
-  font-size: 1.1rem;
-  color: #333;
-  font-weight: 500;
+.flag-counter {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15) 0%, rgba(244, 67, 54, 0.05) 100%);
+  border: 1px solid rgba(244, 67, 54, 0.2);
+  color: #d32f2f;
+  
+  svg path {
+    fill: #d32f2f;
+  }
+}
+
+.game-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  
+  button {
+    @include button-style;
+    flex: 1;
+    min-width: 160px;
+    height: 44px;
+    
+    &:first-child {
+      background-color: $primary-color;
+      color: white;
+    }
+  }
+}
+
+table {
+  border-spacing: 2px;
+  margin: 0 auto;
+}
+
+@keyframes hintPulse {
+  0% {
+    background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+    transform: scale(1);
+  }
+  50% {
+    background: linear-gradient(135deg, #a5d6a7 0%, #81c784 100%);
+    transform: scale(1.1);
+  }
+  100% {
+    background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+    transform: scale(1);
+  }
+}
+
+td {
+  aspect-ratio: 1;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  user-select: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover:not([data-status='clear']) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &[data-status='clear'] {
+    background: white;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: default;
+  }
+
+  &[data-status='flag'] {
+    background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+  }
+
+  &[data-status='hint'] {
+    animation: hintPulse 1.5s ease-in-out;
+    animation-iteration-count: 2;
+  }
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    
+    &.proximity-1 { color: #1976d2; }
+    &.proximity-2 { color: #388e3c; }
+    &.proximity-3 { color: #d32f2f; }
+    &.proximity-4 { color: #7b1fa2; }
+    &.proximity-5 { color: #c2185b; }
+    &.proximity-6 { color: #00838f; }
+    &.proximity-7 { color: #424242; }
+    &.proximity-8 { color: #5d4037; }
+    
+    &.proximity-0 {
+      color: transparent;
+    }
+
+    svg {
+      width: 60%;
+      height: 60%;
+    }
+  }
 }
 
 .game-overlay-lose {
@@ -209,13 +256,53 @@ svg {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(121, 0, 0, 0.398);
+  background: radial-gradient(circle at center, rgba(121, 0, 0, 0.4) 0%, rgba(121, 0, 0, 0.6) 100%);
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease-in-out;
+  backdrop-filter: blur(4px);
 
   &.active {
     opacity: 1;
+  }
+}
+
+.timer {
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(33, 150, 243, 0.05) 100%);
+  border: 1px solid rgba(33, 150, 243, 0.2);
+  color: #1976d2;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.hint-container {
+  display: flex;
+  align-items: center;
+
+  button {
+    min-width: 120px;
+    height: 44px;
+    padding: 10px;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
+    color: #7c5c00;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: linear-gradient(135deg, #e0e0e0 0%, #d5d5d5 100%);
+      color: #888;
+    }
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    }
   }
 }
