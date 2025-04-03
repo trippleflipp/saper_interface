@@ -1,0 +1,20 @@
+.card-wrap {
+    width: 580px;
+    height: fit-content;
+}
+
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-width: auto;
+    width: 100%;
+    transition: 100ms ease;
+    
+    p {
+        align-self: center
+    }
+
+    table {
+        background-color: white;
+    }
+}
