@@ -115,4 +115,16 @@ export class Board {
       }
     }
   }
+
+  getHint(): Cell | null {
+    for (let y = 0; y < this.size; y++) {
+      for (let x = 0; x < this.size; x++) {
+        const cell = this.cells[y][x];
+        if (cell.mine && cell.status === 'open') {
+          return cell;
+        }
+      }
+    }
+    return null;
+  }
 }
