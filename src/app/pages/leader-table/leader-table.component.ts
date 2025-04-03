@@ -1,30 +1,24 @@
-import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../../features/header/header.component";
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { GameService } from '../../core/services/game.service';
 import { map, Observable, Subscription } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
-
-
-export interface LeaderTable {
-  playername: string;
-  position: number;
-  time: number;
-}
-
-export interface LeaderboardData {
-  easy: LeaderTable[];
-  medium: LeaderTable[];
-  hard: LeaderTable[];
-}
+import { LeaderboardCardComponent } from "../../features/leaderboard-card/leaderboard-card.component";
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
+import { LeaderTable } from '../../interfaces/leader-table.model';
+import { LeaderboardData } from '../../interfaces/leaderboard-data.model';
 
 @Component({
   selector: 'app-leader-table',
   imports: [
     HeaderComponent,
-    MatTableModule,
     AsyncPipe,
-    NgIf
+    NgIf,
+    LeaderboardCardComponent,
+    MatButtonToggleModule,
+    FormsModule
   ],
   templateUrl: './leader-table.component.html',
   styleUrl: './leader-table.component.scss'
@@ -32,6 +26,7 @@ export interface LeaderboardData {
 export class LeaderTableComponent implements OnInit {
   leaderboardData$: Observable<LeaderboardData>;
   displayedColumns: string[] = ['position', 'playername', 'time'];
+  selectedDifficulty: string = 'hard';
 
   easyDataSource: MatTableDataSource<LeaderTable>;
   mediumDataSource: MatTableDataSource<LeaderTable>;
@@ -76,13 +71,4 @@ export class LeaderTableComponent implements OnInit {
       this.leaderboardSubscription.unsubscribe();
     }
   }
-
-  formatTime(milliseconds: number): string {
-    const minutes = Math.floor(milliseconds / 60000);
-    const seconds = Math.floor((milliseconds % 60000) / 1000);
-    const ms = milliseconds % 1000;
-
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
-  }
-  
 }
