@@ -9,6 +9,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarData } from '../../interfaces/snackbardata.model';
 import { GameStatus, GameDifficulty } from '../../interfaces/game-status.enum';
 import { SoundService } from '../../core/services/sound.service';
+import { GameService } from '../../core/services/game.service';
 
 interface DifficultySettings {
   size: number;
@@ -50,7 +51,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   constructor(
     private snackBar: MatSnackBar,
-    private soundService: SoundService
+    private soundService: SoundService,
+    private gameService: GameService
   ) {
     this.initializeBoard();
   }
@@ -134,6 +136,10 @@ export class GameComponent implements OnInit, OnDestroy {
     );
     
     this.soundService.playSound("win");
+    this.gameService.new_record({
+      "milliseconds": this.gameTime,
+      "difficulty": this.currentDifficulty,
+    });
   }
 
   flag(cell: Cell): void {
