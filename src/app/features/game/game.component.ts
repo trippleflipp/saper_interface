@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy, Input } from '@angular/core';
 import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -10,6 +10,8 @@ import { SnackbarData } from '../../interfaces/snackbardata.model';
 import { GameStatus, GameDifficulty } from '../../interfaces/game-status.enum';
 import { SoundService } from '../../core/services/sound.service';
 import { GameService } from '../../core/services/game.service';
+import { CoinsService } from '../../core/services/coins.service';
+import { Subscription } from 'rxjs';
 
 interface DifficultySettings {
   size: number;
@@ -33,6 +35,8 @@ interface DifficultySettings {
 export class GameComponent implements OnInit, OnDestroy {
   @ViewChild(ConfettiComponent) confettiComponent!: ConfettiComponent;
   @ViewChild(TimerComponent) timer!: TimerComponent;
+
+  coinsSubscription = new Subscription
   
   firstClicked = false;
   gameStatus: GameStatus = GameStatus.init;
@@ -42,6 +46,7 @@ export class GameComponent implements OnInit, OnDestroy {
   GameDifficulty = GameDifficulty;
   remainingFlags = 0;
   isGameOver = false;
+  currentCoins: number;
   
   private readonly difficultySettings: Record<GameDifficulty, DifficultySettings> = {
     [GameDifficulty.easy]: { size: 9, mines: 8 },
@@ -52,17 +57,23 @@ export class GameComponent implements OnInit, OnDestroy {
   constructor(
     private snackBar: MatSnackBar,
     private soundService: SoundService,
-    private gameService: GameService
+    private gameService: GameService,
+    private coinsService: CoinsService
   ) {
     this.initializeBoard();
   }
 
   ngOnInit(): void {
     this.soundService.setGameActive(true);
+    this.coinsSubscription = this.gameService.coins$.subscribe(coins => {
+      this.currentCoins = coins;
+    });
+    this.gameService.updateCoins();
   }
 
   ngOnDestroy(): void {
     this.soundService.setGameActive(false);
+    this.coinsSubscription.unsubscribe();
   }
 
   private initializeBoard(): void {
@@ -107,11 +118,12 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameStatus = GameStatus.ended;
     this.isGameOver = true;
     this.timer.stop();
+    this.gameService.updateCoins();
     
     this.openSnackbar(
       "На одного сталкера в Зоне стало меньше...", 
       `Время: ${this.formatTime(this.gameTime)}`, 
-      4000
+      3000
     );
     
     this.soundService.stopBackgroundMusic();
@@ -120,22 +132,16 @@ export class GameComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.isGameOver = false;
       this.soundService.startBackgroundMusic();
-    }, 4000);
+    }, 3000);
   }
 
   private handleWin(): void {
     this.gameStatus = GameStatus.ended;
     this.isGameOver = false;
     this.timer.stop();
-    
     this.confettiComponent.launchConfetti();
-    this.openSnackbar(
-      "Победа! Вы нашли артефакт!", 
-      `Время: ${this.formatTime(this.gameTime)}`, 
-      4000
-    );
-    
     this.soundService.playSound("win");
+
     this.gameService.new_record({
       "milliseconds": this.gameTime,
       "difficulty": this.currentDifficulty,
@@ -151,6 +157,25 @@ export class GameComponent implements OnInit, OnDestroy {
     cell.status = newStatus;
     this.remainingFlags += cell.status === 'flag' ? -1 : 1;
     this.soundService.checkGameInteraction();
+  }
+
+  protected openMine() {
+    if (this.gameStatus == GameStatus.started) {
+      const hint = this.board.getHint();
+      if (hint) {
+        this.coinsService.open_mine().subscribe((res: any) => {
+          if (res.message == "ok") {
+            hint.status = 'flag';
+            this.gameService.updateCoins();
+          }
+          else if (res.message == "neok") {
+            this.openSnackbar("Спасать нечего...", "Недостаточно средств", 3000);
+          }
+        })
+      }
+      else this.openSnackbar("Спасатель монет", "Кажется подсказок нет...", 3000);
+    }
+    else this.openSnackbar("Спасатель монет", "Игра не начата!", 3000);
   }
 
   reset(): void {

@@ -1,5 +1,5 @@
 export class Cell {
-    status: 'open' | 'clear' | 'flag' = 'open';
+    status: 'open' | 'clear' | 'flag' | 'hint' = 'open';
     mine = false;
     proximityMines = 0;
   
