@@ -43,6 +43,24 @@ export class AuthService {
     );
   }
 
+  confrimEmail(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/verify_email`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  requestPasswordReset(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/request_password_reset`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/reset_password`, data).pipe(
+      catchError(this.handleError)
+    )
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     this.isLoggedInSubject.next(false);

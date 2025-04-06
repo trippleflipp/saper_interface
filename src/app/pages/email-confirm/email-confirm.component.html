@@ -1,0 +1,94 @@
+<div class="wrapper">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Подтвердите почту</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="confirmForm">
+        <div class="code-input-container">
+          <mat-form-field subscriptSizing="dynamic" appearance="outline" class="digit-field">
+            <input
+              matInput
+              type="text"
+              maxlength="1"
+              [value]="codeDigits[0]"
+              (input)="onDigitInput(0, $event)"
+              #digitInput
+            />
+          </mat-form-field>
+
+          <mat-form-field subscriptSizing="dynamic" appearance="outline" class="digit-field">
+            <input
+              matInput
+              type="text"
+              maxlength="1"
+              [value]="codeDigits[1]"
+              (input)="onDigitInput(1, $event)"
+              #digitInput
+            />
+          </mat-form-field>
+
+          <mat-form-field subscriptSizing="dynamic" appearance="outline" class="digit-field">
+            <input
+              matInput
+              type="text"
+              maxlength="1"
+              [value]="codeDigits[2]"
+              (input)="onDigitInput(2, $event)"
+              #digitInput
+            />
+          </mat-form-field>
+
+          <mat-form-field subscriptSizing="dynamic" appearance="outline" class="digit-field">
+            <input
+              matInput
+              type="text"
+              maxlength="1"
+              [value]="codeDigits[3]"
+              (input)="onDigitInput(3, $event)"
+              #digitInput
+            />
+          </mat-form-field>
+
+          <mat-form-field subscriptSizing="dynamic" appearance="outline" class="digit-field">
+            <input
+              matInput
+              type="text"
+              maxlength="1"
+              [value]="codeDigits[4]"
+              (input)="onDigitInput(4, $event)"
+              #digitInput
+            />
+          </mat-form-field>
+
+          <mat-form-field subscriptSizing="dynamic" appearance="outline" class="digit-field">
+            <input
+              matInput
+              type="text"
+              maxlength="1"
+              [value]="codeDigits[5]"
+              (input)="onDigitInput(5, $event)"
+              #digitInput
+            />
+          </mat-form-field>
+        </div>
+
+        <mat-error class="mat-error" *ngIf="getCodeControl()?.invalid && getCodeControl()?.touched">
+            <span *ngIf="getCodeControl()?.errors?.['required']">Введите код</span>
+            <span *ngIf="getCodeControl()?.errors?.['pattern']">Код должен состоять из 6 цифр</span>
+        </mat-error>
+
+        <button mat-raised-button
+                class="submit-button"
+                color="primary"
+                type="button"
+                (click)="onSubmit()"
+                [disabled]="confirmForm.invalid">
+                <span *ngIf="!loading">Подтвердить</span>
+                <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
