@@ -38,23 +38,15 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-error class="explanation">* - поле обязательное для заполнения</mat-error>
-
                 <a href="javascript:void(0);" 
                    class="forgot-password"
-                   (click)="onForgotPassword()">{{ forgotPassword }}</a>
+                   (click)="onForgotPassword()">Забыли пароль?</a>
 
                 <div class="button-row">
                     <button mat-raised-button
                             color="primary"
                             (click)="redirectToRegister()">
                         Я новенький
-                    </button>
-
-                    <button mat-raised-button
-                            color="primary"
-                            (click)="signInAsGuest()">
-                        Войти как гость
                     </button>
 
                     <button mat-raised-button

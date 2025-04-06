@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   hidePassword: boolean = true;
   loading: boolean = false;
-  forgotPassword: string = "Забыли пароль?";
 
   constructor(
     private fb: FormBuilder,
@@ -50,7 +49,7 @@ export class LoginComponent implements OnInit {
   }
 
   onForgotPassword(): void {
-    this.forgotPassword = "Вспоминайте! :)";
+    this.router.navigate(['/forgot_password'])
   }
 
   redirectToRegister(): void {
@@ -69,10 +68,5 @@ export class LoginComponent implements OnInit {
         this.loading = false;
       }
     )
-  }
-
-  signInAsGuest(): void {
-    this.loading = true;
-    this.router.navigate(['/guest']);
   }
 }

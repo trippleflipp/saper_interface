@@ -65,12 +65,14 @@ export class RegisterComponent {
     this.loading = true;
     const submitForm = new FormGroup({
       "username": this.registerForm.controls['username'],
-      "password": this.registerForm.controls['password']
+      "password": this.registerForm.controls['password'],
+      "email": this.registerForm.controls['email']
     })
     this.authService.register(submitForm.value).subscribe(
-      (res) => {
-        console.log(res);
-        this.router.navigate(['/login']);
+      () => {
+        this.router.navigate(['/email_confirm'], {
+          queryParams: { email: submitForm.value.email }
+        });
       },
       (error) => {
         this.initRegisterForm();
