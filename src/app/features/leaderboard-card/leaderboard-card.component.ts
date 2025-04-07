@@ -3,6 +3,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { fromEvent } from 'rxjs';
 import { delay, map, mapTo, merge, repeat, share, switchMap, takeUntil } from 'rxjs/operators';
+import { GameBackgroundComponent } from '../background/background.component';
 
 interface CardTransform {
   transform: string;
@@ -19,7 +20,8 @@ interface CardTransform {
   selector: 'app-leaderboard-card',
   imports: [
     NgStyle,
-    MatTableModule
+    MatTableModule,
+    GameBackgroundComponent
   ],
   templateUrl: './leaderboard-card.component.html',
   styleUrl: './leaderboard-card.component.scss'
@@ -35,6 +37,8 @@ export class LeaderboardCardComponent implements OnInit, AfterViewInit {
   private width: number;
   private mouseX: number = 0;
   private mouseY: number = 0;
+
+
 
   ngOnInit(): void {
     this.setupMouseTracking();
@@ -93,7 +97,7 @@ export class LeaderboardCardComponent implements OnInit, AfterViewInit {
       'box-shadow': `0px 0px 34px 0px ${this.color}, 0px 0px 20px rgba(0,0,0,0.3)`,
       'border-radius': '10px',
       'backdrop-filter': 'blur(5px)',
-      'background': 'rgba(255, 255, 255, 0.1)'
+      'background': 'rgba(144, 107, 52, 0.7)'
     };
   }
 

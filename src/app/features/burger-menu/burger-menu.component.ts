@@ -5,13 +5,15 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/auth/auth.service';
 import { SoundComponent } from "../sound/sound.component";
+import { GameBackgroundComponent } from '../background/background.component';
 
 @Component({
   selector: 'app-burger-menu',
   standalone: true,
   imports: [
     MatIconModule,
-    SoundComponent
+    SoundComponent,
+    GameBackgroundComponent
 ],
   templateUrl: './burger-menu.component.html',
   styleUrl: './burger-menu.component.scss'

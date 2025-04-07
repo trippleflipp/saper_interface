@@ -12,6 +12,7 @@ import { SoundService } from '../../core/services/sound.service';
 import { GameService } from '../../core/services/game.service';
 import { CoinsService } from '../../core/services/coins.service';
 import { Subscription } from 'rxjs';
+import { GameBackgroundComponent } from '../background/background.component';
 
 interface DifficultySettings {
   size: number;
@@ -28,6 +29,7 @@ interface DifficultySettings {
     TimerComponent,
     ConfettiComponent,
     MatSnackBarModule,
+    GameBackgroundComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
@@ -123,15 +125,15 @@ export class GameComponent implements OnInit, OnDestroy {
     this.openSnackbar(
       "На одного сталкера в Зоне стало меньше...", 
       `Время: ${this.formatTime(this.gameTime)}`, 
-      3000
+      5000
     );
     
-    this.soundService.stopBackgroundMusic();
+    //this.soundService.stopBackgroundMusic();
     this.soundService.playSound("fail-wha-wha");
     
     setTimeout(() => {
       this.isGameOver = false;
-      this.soundService.startBackgroundMusic();
+    //  this.soundService.startBackgroundMusic();
     }, 3000);
   }
 

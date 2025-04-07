@@ -11,10 +11,18 @@
     transition: 100ms ease;
     
     p {
-        align-self: center
+        align-self: center;
+        font-family: 'GOST Type B';
+        font-size: 30px;
+    }
+
+    th, td{
+        align-self: center;
+        font-family: 'GOST Type B';
+        font-size: 21px;
     }
 
     table {
-        background-color: white;
+        background-color: rgba(190, 190, 190, 0.534);
     }
 }

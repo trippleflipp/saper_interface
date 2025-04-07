@@ -9,6 +9,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { LeaderTable } from '../../interfaces/leader-table.model';
 import { LeaderboardData } from '../../interfaces/leaderboard-data.model';
+import { SoundService } from '../../core/services/sound.service';
 
 @Component({
   selector: 'app-leader-table',
@@ -34,9 +35,13 @@ export class LeaderTableComponent implements OnInit {
 
   private leaderboardSubscription: Subscription;
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private soundService: SoundService
+  ) {}
 
   ngOnInit(): void {
+    this.soundService.setGameActive(true);
     this.leaderboardData$ = this.gameService.get_records().pipe(
       map((data: any) => {
         const leaderboard: LeaderboardData = {

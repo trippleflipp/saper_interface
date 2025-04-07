@@ -1,9 +1,10 @@
+<app-background></app-background>
 <div #card class="card-wrap">
     <div class="card" [ngStyle]="cardStyle()">
         <div class="card-bg">
             <div class="сard-placeholder">
                 <div class="table-wrapper">
-                    <p>Уровень: {{difficulty}}</p>
+                    <p style="color: white;">Уровень: {{difficulty}}</p>
                     <table mat-table [dataSource]="dataSource" class="table">
                       <ng-container matColumnDef="position">
                         <th mat-header-cell *matHeaderCellDef>№</th>
