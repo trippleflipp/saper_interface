@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -12,7 +12,6 @@ import { SoundService } from '../../core/services/sound.service';
 import { GameService } from '../../core/services/game.service';
 import { CoinsService } from '../../core/services/coins.service';
 import { Subscription } from 'rxjs';
-import { GameBackgroundComponent } from '../background/background.component';
 
 interface DifficultySettings {
   size: number;
@@ -28,13 +27,12 @@ interface DifficultySettings {
     NgClass,
     TimerComponent,
     ConfettiComponent,
-    MatSnackBarModule,
-    GameBackgroundComponent
+    MatSnackBarModule
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-export class GameComponent implements OnInit, OnDestroy {
+export class GameComponent implements OnInit, OnDestroy{
   @ViewChild(ConfettiComponent) confettiComponent!: ConfettiComponent;
   @ViewChild(TimerComponent) timer!: TimerComponent;
 
@@ -63,6 +61,7 @@ export class GameComponent implements OnInit, OnDestroy {
     private coinsService: CoinsService
   ) {
     this.initializeBoard();
+    
   }
 
   ngOnInit(): void {
@@ -77,7 +76,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.soundService.setGameActive(false);
     this.coinsSubscription.unsubscribe();
   }
-
+  
   private initializeBoard(): void {
     const settings = this.difficultySettings[this.currentDifficulty];
     this.board = new Board(settings.size, settings.mines);

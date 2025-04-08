@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { LeaderTable } from '../../interfaces/leader-table.model';
 import { LeaderboardData } from '../../interfaces/leaderboard-data.model';
 import { SoundService } from '../../core/services/sound.service';
+import { GameBackgroundComponent } from '../../features/background/background.component';
 
 @Component({
   selector: 'app-leader-table',
@@ -19,12 +20,14 @@ import { SoundService } from '../../core/services/sound.service';
     NgIf,
     LeaderboardCardComponent,
     MatButtonToggleModule,
-    FormsModule
+    FormsModule,
+    GameBackgroundComponent
   ],
   templateUrl: './leader-table.component.html',
   styleUrl: './leader-table.component.scss'
 })
 export class LeaderTableComponent implements OnInit {
+  
   leaderboardData$: Observable<LeaderboardData>;
   displayedColumns: string[] = ['position', 'playername', 'time'];
   selectedDifficulty: string = 'hard';
