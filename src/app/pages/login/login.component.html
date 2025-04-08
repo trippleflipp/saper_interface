@@ -1,3 +1,4 @@
+<app-background [backgroundType]="'auth'"></app-background>
 <div class="login-wrapper">
     <mat-card>
         <mat-card-header>
@@ -8,7 +9,8 @@
             <form [formGroup]="loginForm">
                 <mat-form-field appearance="outline"
                                 class="form-field"
-                                subscriptSizing="dynamic">
+                                subscriptSizing="dynamic"
+                                hideRequiredMarker>
                     <mat-label>Логин</mat-label>
                     <input matInput 
                            formControlName="username"
@@ -20,9 +22,11 @@
 
                 <mat-form-field appearance="outline"
                                 class="form-field"
-                                subscriptSizing="dynamic">
+                                subscriptSizing="dynamic"
+                                hideRequiredMarker>
                     <mat-label>Пароль</mat-label>
                     <input matInput 
+                           class="input_login"
                            [type]="hidePassword ? 'password' : 'text'"
                            formControlName="password">
                     <button mat-icon-button
@@ -44,13 +48,14 @@
 
                 <div class="button-row">
                     <button mat-raised-button
+                            class="button_login"
                             color="primary"
                             (click)="redirectToRegister()">
                         Я новенький
                     </button>
 
                     <button mat-raised-button
-                            color="primary"
+                            class="button_login"
                             (click)="submitLogin()"
                             [disabled]="loginForm.invalid || loading">
                         <span *ngIf="!loading">Войти</span>

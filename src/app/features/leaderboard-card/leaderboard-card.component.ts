@@ -3,7 +3,6 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { fromEvent } from 'rxjs';
 import { delay, map, mapTo, merge, repeat, share, switchMap, takeUntil } from 'rxjs/operators';
-import { GameBackgroundComponent } from '../background/background.component';
 
 interface CardTransform {
   transform: string;
@@ -20,8 +19,7 @@ interface CardTransform {
   selector: 'app-leaderboard-card',
   imports: [
     NgStyle,
-    MatTableModule,
-    GameBackgroundComponent
+    MatTableModule
   ],
   templateUrl: './leaderboard-card.component.html',
   styleUrl: './leaderboard-card.component.scss'
