@@ -9,6 +9,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { LeaderTable } from '../../interfaces/leader-table.model';
 import { LeaderboardData } from '../../interfaces/leaderboard-data.model';
+import { SoundService } from '../../core/services/sound.service';
+import { GameBackgroundComponent } from '../../features/background/background.component';
 
 @Component({
   selector: 'app-leader-table',
@@ -18,12 +20,14 @@ import { LeaderboardData } from '../../interfaces/leaderboard-data.model';
     NgIf,
     LeaderboardCardComponent,
     MatButtonToggleModule,
-    FormsModule
+    FormsModule,
+    GameBackgroundComponent
   ],
   templateUrl: './leader-table.component.html',
   styleUrl: './leader-table.component.scss'
 })
 export class LeaderTableComponent implements OnInit {
+  
   leaderboardData$: Observable<LeaderboardData>;
   displayedColumns: string[] = ['position', 'playername', 'time'];
   selectedDifficulty: string = 'hard';
@@ -34,9 +38,13 @@ export class LeaderTableComponent implements OnInit {
 
   private leaderboardSubscription: Subscription;
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private soundService: SoundService
+  ) {}
 
   ngOnInit(): void {
+    this.soundService.setGameActive(true);
     this.leaderboardData$ = this.gameService.get_records().pipe(
       map((data: any) => {
         const leaderboard: LeaderboardData = {

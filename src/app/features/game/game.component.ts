@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -27,12 +27,12 @@ interface DifficultySettings {
     NgClass,
     TimerComponent,
     ConfettiComponent,
-    MatSnackBarModule,
+    MatSnackBarModule
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-export class GameComponent implements OnInit, OnDestroy {
+export class GameComponent implements OnInit, OnDestroy{
   @ViewChild(ConfettiComponent) confettiComponent!: ConfettiComponent;
   @ViewChild(TimerComponent) timer!: TimerComponent;
 
@@ -61,6 +61,7 @@ export class GameComponent implements OnInit, OnDestroy {
     private coinsService: CoinsService
   ) {
     this.initializeBoard();
+    
   }
 
   ngOnInit(): void {
@@ -75,10 +76,13 @@ export class GameComponent implements OnInit, OnDestroy {
     this.soundService.setGameActive(false);
     this.coinsSubscription.unsubscribe();
   }
-
+  
   private initializeBoard(): void {
     const settings = this.difficultySettings[this.currentDifficulty];
     this.board = new Board(settings.size, settings.mines);
+    if (this.soundService.currentMusicPath !== 'assets/sounds/background-music.mp3') {
+      this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
+    }
     this.remainingFlags = settings.mines;
   }
 
@@ -101,6 +105,8 @@ export class GameComponent implements OnInit, OnDestroy {
     if (this.gameStatus === GameStatus.init) {
       this.gameStatus = GameStatus.started;
       this.board.generateBoard(cell.row, cell.column);
+      this.soundService.stopBackgroundMusic();
+      this.soundService.changeBackgroundMusic('assets/sounds/game_music.mp3');
       this.timer.start();
       this.soundService.checkGameInteraction();
     }
@@ -119,19 +125,18 @@ export class GameComponent implements OnInit, OnDestroy {
     this.isGameOver = true;
     this.timer.stop();
     this.gameService.updateCoins();
+    this.soundService.stopBackgroundMusic();
+    this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
     
     this.openSnackbar(
       "На одного сталкера в Зоне стало меньше...", 
       `Время: ${this.formatTime(this.gameTime)}`, 
-      3000
+      5000
     );
-    
-    this.soundService.stopBackgroundMusic();
-    this.soundService.playSound("fail-wha-wha");
+    this.soundService.playSound("defeat");
     
     setTimeout(() => {
       this.isGameOver = false;
-      this.soundService.startBackgroundMusic();
     }, 3000);
   }
 
@@ -140,7 +145,9 @@ export class GameComponent implements OnInit, OnDestroy {
     this.isGameOver = false;
     this.timer.stop();
     this.confettiComponent.launchConfetti();
-    this.soundService.playSound("win");
+    this.soundService.stopBackgroundMusic();
+    this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
+    this.soundService.playSound("victory");
 
     this.gameService.new_record({
       "milliseconds": this.gameTime,

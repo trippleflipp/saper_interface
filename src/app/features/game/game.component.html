@@ -3,45 +3,40 @@
 	<div class="game-container">
 		<div class="game-controls">
 			<div class="difficulty-section">
-				<span class="difficulty-label">Уровень</span>
+				<span class="difficulty-label">Уровень сложности</span>
 				<div class="difficulty-controls">
-					<button [class.active]="currentDifficulty === GameDifficulty.easy" (click)="setDifficulty(GameDifficulty.easy)">Легкий</button>
-					<button [class.active]="currentDifficulty === GameDifficulty.medium" (click)="setDifficulty(GameDifficulty.medium)">Средний</button>
-					<button [class.active]="currentDifficulty === GameDifficulty.hard" (click)="setDifficulty(GameDifficulty.hard)">Сложный</button>
+					<button [class.active]="currentDifficulty === GameDifficulty.easy" (click)="setDifficulty(GameDifficulty.easy)" title="Легкий"></button>
+					<button [class.active]="currentDifficulty === GameDifficulty.medium" (click)="setDifficulty(GameDifficulty.medium)" title="Средний"></button>
+					<button [class.active]="currentDifficulty === GameDifficulty.hard" (click)="setDifficulty(GameDifficulty.hard)" title="Сложный"></button>
 				</div>
 			</div>
-			
 			<div class="hints">
-				<div class="coins-counter">
-					<svg style="width:24px;height:24px" viewBox="0 0 24 24">
-						<path 
-							fill="#FFD700" 
-							d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A1,1 0 0,1 9,12V9A1,1 0 0,1 10,8H11V7H13V8H15V10H11V11H14A1,1 0 0,1 15,12V15A1,1 0 0,1 14,16H13V17H11Z"
-						/>
-					</svg>
-					<span>{{ currentCoins }}</span>
+				<div class="game-info">
+					<div class="coins-counter">
+						<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+							<path 
+								fill="#FFD700" 
+								d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A1,1 0 0,1 9,12V9A1,1 0 0,1 10,8H11V7H13V8H15V10H11V11H14A1,1 0 0,1 15,12V15A1,1 0 0,1 14,16H13V17H11Z"
+							/>
+						</svg>
+						<span>{{ currentCoins }}</span>
+					</div>
+					<div class="flag-counter">
+						<img src="assets/images/icon-bolt.png" alt="Bolt Icon" style="width:24px;height:24px">
+						<span>{{ remainingFlags }}</span>
+					</div>
 				</div>
 				<div class="hint-buttons">
 					<button (click)="openMine()" title="Стоимость: 10. Ставит флаг на случайную мину.">
-						<svg style="width:20px;height:20px" viewBox="0 0 24 24">
-							<path fill="#000000" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" />
-						</svg>
+						<img src="assets/images/icon-bolt.png" alt="Bolt Icon" style="width:24px;height:24px">
 					</button>
 				</div>
 			</div>
-			
-			<div class="game-info">
-				<div class="flag-counter">
-					<svg style="width:24px;height:24px" viewBox="0 0 24 24">
-						<path fill="#000000" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" />
-					</svg>
-					<span>{{ remainingFlags }}</span>
-				</div>
+			<div class="hints" style="margin-right: 50px;">
 				<app-timer class="timer" (timerStopped)="onTimerStopped($event)"></app-timer>
+				<button (click)="reset()">Перезапустить</button>
 			</div>
-			<button (click)="reset()">Перезапустить</button>
 		</div>
-
 		<table>
 			<tr *ngFor="let row of board.cells; index as y">
 				<td *ngFor="let cell of row; index as x"
@@ -52,17 +47,10 @@
 					<div *ngIf="cell.status === 'clear' && !cell.mine && cell.proximityMines === 0" [ngClass]="getProximityClass(cell)">{{ cell.proximityMines }}</div>
 
 					<div *ngIf="cell.status === 'flag'">
-						<svg style="width:20px;height:20px" viewBox="0 0 24 24">
-						<path fill="#000000" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" />
-						</svg>
+						<img src="assets/images/icon-bolt.png" alt="Flag" style="width:24px;height:24px">
 					</div>
 					<div *ngIf="cell.mine && cell.status === 'clear'">
-						<svg style="width:20px;height:20px" viewBox="0 0 24 24">
-						<path
-							fill="#000000"
-							d="M23,13V11H19.93C19.75,9.58 19.19,8.23 18.31,7.1L20.5,4.93L19.07,3.5L16.9,5.69C15.77,4.81 14.42,4.25 13,4.07V1H11V4.07C9.58,4.25 8.23,4.81 7.1,5.69L4.93,3.5L3.5,4.93L5.69,7.1C4.81,8.23 4.25,9.58 4.07,11H1V13H4.07C4.25,14.42 4.81,15.77 5.69,16.9L3.5,19.07L4.93,20.5L7.1,18.31C8.23,19.19 9.58,19.75 11,19.93V23H13V19.93C14.42,19.75 15.77,19.19 16.9,18.31L19.07,20.5L20.5,19.07L18.31,16.9C19.19,15.77 19.75,14.42 19.93,13H23M12,8A4,4 0 0,0 8,12H6A6,6 0 0,1 12,6V8Z"
-						/>
-						</svg>
+						<img src="assets/images/icon-bomb.png" alt="Bomb" style="width:30px;height:30px">
 					</div>
 				</td>
 			</tr>

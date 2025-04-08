@@ -12,7 +12,7 @@ type AudioSourceType = MediaElementAudioSourceNode;
   providedIn: 'root'
 })
 export class SoundService implements OnDestroy {
-  private readonly audio: HTMLAudioElement;
+  public audio: HTMLAudioElement;
   private audioContext?: AudioContextType;
   private audioSource?: AudioSourceType;
   private hasUserInteracted = false;
@@ -20,6 +20,7 @@ export class SoundService implements OnDestroy {
   private pendingMusicStart = false;
   private isGameActive = false;
   private readonly eventHandlers: { [key: string]: () => void };
+  public currentMusicPath: string = 'assets/sounds/background-music.mp3';
 
   isMusicEnabled = true;
   isSoundEnabled = true;
@@ -28,7 +29,7 @@ export class SoundService implements OnDestroy {
   isMusicPlaying = false;
 
   constructor() {
-    this.audio = new Audio('assets/sounds/background-music.mp3');
+    this.audio = new Audio(this.currentMusicPath);
     this.audio.loop = true;
     this.audio.volume = this.musicVolume;
     
@@ -117,6 +118,24 @@ export class SoundService implements OnDestroy {
     }, INTERACTION_DELAY);
   }
 
+  public async changeBackgroundMusic(musicPath: string): Promise<void> {
+    this.currentMusicPath = musicPath;
+    this.stopBackgroundMusic();
+    
+    // Создаем новый аудио элемент
+    this.audio = new Audio(this.currentMusicPath);
+    this.audio.loop = true;
+    this.audio.volume = this.musicVolume;
+    
+    // Переинициализируем аудио контекст для нового аудио элемента
+    this.initializeAudioContext();
+    
+    // Если игра активна и музыка включена, начинаем воспроизведение
+    if (this.isGameActive && this.isMusicEnabled && this.musicVolume > 0) {
+      await this.startBackgroundMusic();
+    }
+  }
+
   public async startBackgroundMusic(): Promise<void> {
     if (!this.hasUserInteracted || !this.isGameActive) {
       this.pendingMusicStart = true;
@@ -127,6 +146,10 @@ export class SoundService implements OnDestroy {
       if (this.audioContext?.state === 'suspended') {
         await this.audioContext.resume();
       }
+      
+      // Убедимся, что аудио элемент настроен правильно
+      this.audio.volume = this.musicVolume;
+      this.audio.loop = true;
       
       await this.audio.play();
       this.isMusicPlaying = true;
@@ -172,6 +195,10 @@ export class SoundService implements OnDestroy {
     if (this.canPlayMusic()) {
       this.startBackgroundMusic();
     }
+  }
+
+  updateMusicVolume() {
+    this.audio.volume = this.musicVolume;
   }
 
   setSoundVolume(volume: number): void {

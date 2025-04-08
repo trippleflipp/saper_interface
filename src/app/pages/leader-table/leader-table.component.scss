@@ -1,4 +1,5 @@
 .wrapper {
+    color: white;
     padding: 0px 40px;
     height: 85vh;
     display: flex;
@@ -10,12 +11,14 @@
 
 .difficulty-toggle {
     margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(144, 107, 52, 0.8);
     border-radius: 8px;
     overflow: hidden;
     
     ::ng-deep .mat-button-toggle {
-        color: black;
+        font-family: 'GOST Type B';
+        font-size: 30px;
+        color: white;
         background: transparent;
         
         &.mat-button-toggle-checked {
