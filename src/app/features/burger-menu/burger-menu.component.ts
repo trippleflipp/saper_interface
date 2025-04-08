@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/auth/auth.service';
 import { SoundComponent } from "../sound/sound.component";
 import { GameBackgroundComponent } from '../background/background.component';
+import { SoundService } from '../../core/services/sound.service';
 
 @Component({
   selector: 'app-burger-menu',
@@ -26,6 +27,7 @@ export class BurgerMenuComponent {
     private dialog: MatDialog,
     private router: Router,
     private authService: AuthService,
+    private soundService: SoundService
   ) {}
 
   toggleMenu() {
@@ -38,14 +40,17 @@ export class BurgerMenuComponent {
   }
 
   openLeaderTable() {
+    this.soundService.playSound("menu_click")
     this.router.navigate(['/leader_table']);
   }
 
   openGame() {
+    this.soundService.playSound("menu_click")
     this.router.navigate(['/home']);
   }
 
   openRules() {
+    this.soundService.playSound("menu_click")
     this.dialog.open(RulesDialogComponent, {
       width: '50vw',
       maxWidth: '90vw',
