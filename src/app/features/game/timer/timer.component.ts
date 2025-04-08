@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-timer',

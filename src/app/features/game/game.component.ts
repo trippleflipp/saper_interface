@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -12,6 +12,7 @@ import { SoundService } from '../../core/services/sound.service';
 import { GameService } from '../../core/services/game.service';
 import { CoinsService } from '../../core/services/coins.service';
 import { Subscription } from 'rxjs';
+import { defeatPhrases, victoryPhrases } from '../../interfaces/phrases';
 
 interface DifficultySettings {
   size: number;
@@ -36,46 +37,8 @@ export class GameComponent implements OnInit, OnDestroy {
   @ViewChild(ConfettiComponent) confettiComponent!: ConfettiComponent;
   @ViewChild(TimerComponent) timer!: TimerComponent;
 
-  private readonly defeatPhrases: string[] = [
-    "Ещё один сталкер, который не дошёл до Чёрного Брата...",
-    "Зона не прощает невнимательности.",
-    "Бум! И нет сталкера.",
-    "В следующий раз... если будет следующий раз.",
-    "Ты размазан по Зоне. Надеюсь, быстро.",
-    "Мертвец. Ещё один.",
-    "Новичкам здесь не место. Ты это подтвердил.",
-    "Ты не первый. И не последний.",
-    "Ну вот и всё. Теперь ты часть ландшафта.",
-    "Мог бы стать легендой... но стал статистикой.",
-    "Теперь твои кости будут пугать новичков.",
-    "Долгари добавят тебя в список потерь.",
-    "Даже собаки будут обходить это место.",
-    "Ты не первый, кого разорвало в клочья. И не последний.",
-    "Теперь ты — предупреждение для других.",
-    "Ну что, в следующей жизни повезёт больше?",
-    "Ты думал, что готов к Зоне. Зона думала иначе.",
-    "Вот и всё. Ни артефактов, ни славы.",
-    "Закончилось как обычно — смертью."
-  ];
-
-  private readonly victoryPhrases: string[] = [
-    "Артефакт добыт, и ты еще жив. Редкое сочетание.",
-    "Хорошая работа, сталкер. Теперь можешь выдохнуть.",
-    "Повезло... На этот раз.",
-    "Ты либо очень удачлив, либо очень умён. В Зоне это одно и то же.",
-    "Чисто! Можешь идти дальше, пока Зона не передумала.",
-    "Неплохо. Но расслабляться рано — впереди ещё много смертей.",
-    "Ты прошел. Но помни: Зона не прощает ошибок.",
-    "Молодец, сталкер. Теперь можешь отдохнуть.",
-    "Обезврежено. Но кто знает, что ждёт за следующим поворотом?",
-    "Тыыы... живой. Пока что.",
-    "Ха! Да ты везунчик",
-    "Неужели кто-то учил тебя этому? Или просто инстинкты?",
-    "Ты прошел. Но помни — следующий шаг может быть последним.",
-    "Неплохо. Но в следующий раз может не повезти.",
-    "Ты явно не в первый раз играешь с смертью.",
-    "Ты справился. Но удача — ненадёжный союзник."
-  ];
+  private readonly defeatPhrases = defeatPhrases;
+  private readonly victoryPhrases = victoryPhrases;
 
   coinsSubscription = new Subscription
   
@@ -211,39 +174,41 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   protected openMine() {
-    if (this.gameStatus == GameStatus.started) {
-      if (this.remainingFlags <= 0) {
+    if (this.gameStatus !== GameStatus.started) {
+        this.openSnackbar("Спасатель монет", "Игра не начата!", 3000);
+        return;
+    }
+    if (this.remainingFlags <= 0) {
         this.openSnackbar("Спасатель монет", "Не осталось флажков!", 3000);
         return;
-      }
-      if (this.isHintLoading) {
-        return;
-      }
-      const hint = this.board.getHint();
-      if (hint) {
-        this.isHintLoading = true;
-        this.coinsService.open_mine().subscribe({
-          next: (res: any) => {
-            if (res.message == "ok") {
-              hint.status = 'flag';
-              this.remainingFlags--;
-              this.gameService.updateCoins();
-            }
-            else if (res.message == "neok") {
-              this.openSnackbar("Спасать нечего...", "Недостаточно средств", 3000);
-            }
-          },
-          error: () => {
-            this.openSnackbar("Ошибка", "Что-то пошло не так", 3000);
-          },
-          complete: () => {
-            this.isHintLoading = false;
-          }
-        });
-      }
-      else this.openSnackbar("Спасатель монет", "Кажется подсказок нет...", 3000);
     }
-    else this.openSnackbar("Спасатель монет", "Игра не начата!", 3000);
+    if (this.isHintLoading) {
+        return;
+    }
+    const hint = this.board.getHint();
+    if (!hint) {
+        this.openSnackbar("Спасатель монет", "Кажется подсказок нет...", 3000);
+        return;
+    }
+
+    this.isHintLoading = true;
+    this.coinsService.open_mine().subscribe({
+        next: (res: any) => {
+            if (res.message === "ok") {
+                hint.status = 'flag';
+                this.remainingFlags--;
+                this.gameService.updateCoins();
+            } else if (res.message === "neok") {
+                this.openSnackbar("Спасать нечего...", "Недостаточно средств", 3000);
+            }
+        },
+        error: () => {
+            this.openSnackbar("Ошибка", "Что-то пошло не так", 3000);
+        },
+        complete: () => {
+            this.isHintLoading = false;
+        }
+    });
   }
 
   reset(): void {
