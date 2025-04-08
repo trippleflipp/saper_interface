@@ -22,7 +22,7 @@
 					<span>{{ currentCoins }}</span>
 				</div>
 				<div class="hint-buttons">
-					<button (click)="openMine()" title="Стоимость: 10. Ставит флаг на случайную мину.">
+					<button (click)="openMine()" [disabled]="isGameOver || isHintLoading" title="Стоимость: 10. Ставит флаг на случайную мину.">
 						<svg style="width:20px;height:20px" viewBox="0 0 24 24">
 							<path fill="#000000" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" />
 						</svg>

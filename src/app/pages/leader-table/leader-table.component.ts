@@ -40,21 +40,9 @@ export class LeaderTableComponent implements OnInit {
     this.leaderboardData$ = this.gameService.get_records().pipe(
       map((data: any) => {
         const leaderboard: LeaderboardData = {
-          easy: (data.easy && Array.isArray(data.easy)) ? data.easy.map((item: any, index: any) => ({
-            playername: item.username,
-            position: index + 1,
-            time: item.milliseconds
-          })) : [],
-          medium: (data.medium && Array.isArray(data.medium)) ? data.medium.map((item: any, index: any) => ({
-            playername: item.username,
-            position: index + 1,
-            time: item.milliseconds
-          })) : [],
-          hard: (data.hard && Array.isArray(data.hard)) ? data.hard.map((item: any, index: any) => ({
-            playername: item.username,
-            position: index + 1,
-            time: item.milliseconds
-          })) : []
+          easy: this.filterBestAttempts(data.easy || []),
+          medium: this.filterBestAttempts(data.medium || []),
+          hard: this.filterBestAttempts(data.hard || [])
         };
 
         this.easyDataSource = new MatTableDataSource(leaderboard.easy);
@@ -64,6 +52,36 @@ export class LeaderTableComponent implements OnInit {
         return leaderboard;
       })
     );
+  }
+
+  private filterBestAttempts(records: any[]): LeaderTable[] {
+    if (!Array.isArray(records)) return [];
+    
+    // Создаем Map для хранения лучшего времени каждого игрока
+    const bestTimes = new Map<string, number>();
+    
+    // Находим лучшее время для каждого игрока
+    records.forEach(record => {
+      const currentBest = bestTimes.get(record.username);
+      if (!currentBest || record.milliseconds < currentBest) {
+        bestTimes.set(record.username, record.milliseconds);
+      }
+    });
+
+    // Создаем массив только с лучшими результатами
+    const bestRecords = Array.from(bestTimes.entries())
+      .map(([username, milliseconds]) => ({
+        username,
+        milliseconds
+      }))
+      .sort((a, b) => a.milliseconds - b.milliseconds);
+
+    // Преобразуем в формат LeaderTable
+    return bestRecords.map((record, index) => ({
+      playername: record.username,
+      position: index + 1,
+      time: record.milliseconds
+    }));
   }
 
   ngOnDestroy(): void {
