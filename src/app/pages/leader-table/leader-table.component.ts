@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../../features/header/header.component";
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { GameService } from '../../core/services/game.service';
 import { map, Observable, Subscription } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';

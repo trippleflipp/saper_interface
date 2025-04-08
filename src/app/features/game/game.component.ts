@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { Board } from './board';
 import { Cell } from './cell';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -12,6 +12,7 @@ import { SoundService } from '../../core/services/sound.service';
 import { GameService } from '../../core/services/game.service';
 import { CoinsService } from '../../core/services/coins.service';
 import { Subscription } from 'rxjs';
+import { defeatPhrases, victoryPhrases } from '../../interfaces/phrases';
 
 interface DifficultySettings {
   size: number;
@@ -36,6 +37,9 @@ export class GameComponent implements OnInit, OnDestroy{
   @ViewChild(ConfettiComponent) confettiComponent!: ConfettiComponent;
   @ViewChild(TimerComponent) timer!: TimerComponent;
 
+  private readonly defeatPhrases = defeatPhrases;
+  private readonly victoryPhrases = victoryPhrases;
+
   coinsSubscription = new Subscription
   
   firstClicked = false;
@@ -47,6 +51,7 @@ export class GameComponent implements OnInit, OnDestroy{
   remainingFlags = 0;
   isGameOver = false;
   currentCoins: number;
+  isHintLoading = false;
   
   private readonly difficultySettings: Record<GameDifficulty, DifficultySettings> = {
     [GameDifficulty.easy]: { size: 9, mines: 8 },
@@ -128,8 +133,10 @@ export class GameComponent implements OnInit, OnDestroy{
     this.soundService.stopBackgroundMusic();
     this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
     
+    const randomPhrase = this.defeatPhrases[Math.floor(Math.random() * this.defeatPhrases.length)];
+    
     this.openSnackbar(
-      "На одного сталкера в Зоне стало меньше...", 
+      randomPhrase, 
       `Время: ${this.formatTime(this.gameTime)}`, 
       5000
     );
@@ -149,6 +156,13 @@ export class GameComponent implements OnInit, OnDestroy{
     this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
     this.soundService.playSound("victory");
 
+    const randomPhrase = this.victoryPhrases[Math.floor(Math.random() * this.victoryPhrases.length)];
+    this.openSnackbar(
+      randomPhrase,
+      `Время: ${this.formatTime(this.gameTime)}`,
+      6000
+    );
+
     this.gameService.new_record({
       "milliseconds": this.gameTime,
       "difficulty": this.currentDifficulty,
@@ -167,22 +181,41 @@ export class GameComponent implements OnInit, OnDestroy{
   }
 
   protected openMine() {
-    if (this.gameStatus == GameStatus.started) {
-      const hint = this.board.getHint();
-      if (hint) {
-        this.coinsService.open_mine().subscribe((res: any) => {
-          if (res.message == "ok") {
-            hint.status = 'flag';
-            this.gameService.updateCoins();
-          }
-          else if (res.message == "neok") {
-            this.openSnackbar("Спасать нечего...", "Недостаточно средств", 3000);
-          }
-        })
-      }
-      else this.openSnackbar("Спасатель монет", "Кажется подсказок нет...", 3000);
+    if (this.gameStatus !== GameStatus.started) {
+        this.openSnackbar("Спасатель монет", "Игра не начата!", 3000);
+        return;
     }
-    else this.openSnackbar("Спасатель монет", "Игра не начата!", 3000);
+    if (this.remainingFlags <= 0) {
+        this.openSnackbar("Спасатель монет", "Не осталось флажков!", 3000);
+        return;
+    }
+    if (this.isHintLoading) {
+        return;
+    }
+    const hint = this.board.getHint();
+    if (!hint) {
+        this.openSnackbar("Спасатель монет", "Кажется подсказок нет...", 3000);
+        return;
+    }
+
+    this.isHintLoading = true;
+    this.coinsService.open_mine().subscribe({
+        next: (res: any) => {
+            if (res.message === "ok") {
+                hint.status = 'flag';
+                this.remainingFlags--;
+                this.gameService.updateCoins();
+            } else if (res.message === "neok") {
+                this.openSnackbar("Спасать нечего...", "Недостаточно средств", 3000);
+            }
+        },
+        error: () => {
+            this.openSnackbar("Ошибка", "Что-то пошло не так", 3000);
+        },
+        complete: () => {
+            this.isHintLoading = false;
+        }
+    });
   }
 
   reset(): void {
