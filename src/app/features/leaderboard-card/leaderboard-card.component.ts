@@ -36,6 +36,8 @@ export class LeaderboardCardComponent implements OnInit, AfterViewInit {
   private mouseX: number = 0;
   private mouseY: number = 0;
 
+
+
   ngOnInit(): void {
     this.setupMouseTracking();
   }
@@ -93,7 +95,7 @@ export class LeaderboardCardComponent implements OnInit, AfterViewInit {
       'box-shadow': `0px 0px 34px 0px ${this.color}, 0px 0px 20px rgba(0,0,0,0.3)`,
       'border-radius': '10px',
       'backdrop-filter': 'blur(5px)',
-      'background': 'rgba(255, 255, 255, 0.1)'
+      'background': 'rgba(144, 107, 52, 0.7)'
     };
   }
 

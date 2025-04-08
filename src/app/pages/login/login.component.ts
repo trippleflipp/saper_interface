@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
+import { GameBackgroundComponent } from '../../features/background/background.component';
+
 
 @Component({
   selector: 'app-login',
@@ -21,11 +23,13 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatProgressSpinnerModule,
     NgIf,
+    GameBackgroundComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit{
+
   loginForm: FormGroup;
   hidePassword: boolean = true;
   loading: boolean = false;
@@ -38,7 +42,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.initLoginForm();
-    
   }
 
   initLoginForm(): void {

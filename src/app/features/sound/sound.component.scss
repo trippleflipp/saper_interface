@@ -1,20 +1,24 @@
 .sound-control {
+    background-color: #ffffffd4;
     display: flex;
+    padding: 10px 0;
+    border: 2px solid rgb(115, 71, 0);
+    border-radius: 10px;
     align-items: center;
     gap: 10px;
     padding: 8px;
+    margin: 10px 0;
     height: 40px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    border-radius: 4px;
     position: relative;  // Add position relative
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: #ffffffbd;
     }
 
     mat-icon {
-      color: #64b5f6;
+      color: rgb(115, 71, 0);
     }
 
     span {
@@ -24,7 +28,7 @@
 
     mat-slider {
         width: 40px;
-        color: #64b5f6;
+        color: rgb(115, 71, 0);
     }
 }
 

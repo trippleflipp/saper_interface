@@ -1,8 +1,9 @@
-$border-color: #888;
+$border-color: rgb(39, 69, 71);
 $shadow-color: #bbb;
-$highlight-color: #fff;
+$highlight-color: #41c999;
 $mine-color: #d32f2f;
 $flag-color: #fdd835;
+$accent-color: #73cecf;
 
 .wrapper {
   display: flex;
@@ -16,7 +17,8 @@ $flag-color: #fdd835;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
+  background-color: rgb(14, 34, 36);
+  border: 4px solid rgba(64, 203, 208, 0.737);
   border-radius: 8px;
   box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.3);
   width: 800px;
@@ -32,27 +34,55 @@ $flag-color: #fdd835;
 
 .difficulty-controls {
   display: flex;
-  gap: 10px;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
 .difficulty-controls button {
-  padding: 8px 16px;
-  font-size: 1rem;
-  background-color: #e0e0e0;
-  color: #333;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   border: none;
   cursor: pointer;
-  border-radius: 4px;
-  margin: 0;
+  transition: transform 0.2s ease;
+  position: relative;
 
   &:hover {
-    background-color: #d0d0d0;
+    transform: scale(1.1);
   }
 
   &.active {
-    background-color: #4CAF50;
-    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+}
+
+.difficulty-controls button:nth-child(1) {
+  background-color: rgba(76, 175, 80, 0.3);
+  color: #4CAF50;
+}
+
+.difficulty-controls button:nth-child(2) {
+  background-color: rgba(255, 152, 0, 0.3);
+  color: #FF9800;
+}
+
+.difficulty-controls button:nth-child(3) {
+  background-color: rgba(244, 67, 54, 0.3);
+  color: #F44336;
 }
 
 .hints {
@@ -64,6 +94,9 @@ $flag-color: #fdd835;
 }
 
 .coins-counter {
+  font-family: 'GOST Type B';
+  color: $accent-color;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,8 +114,7 @@ $flag-color: #fdd835;
 
 .hint-buttons {
   display: flex;
-  flex-direction: row;
-  
+  align-items: center;
   button {
     width: 70px;
     height: 40px;
@@ -96,64 +128,56 @@ $flag-color: #fdd835;
 }
 
 .timer {
-  margin-right: 20px;
+  font-family: 'GOST Type B';
+  font-size: 24px;
+  background-color: #114a4b;
+  color: $accent-color;
+  border: 2px solid $accent-color;
+  border-radius: 5px;
+  padding: 3px;
 }
 
 table {
   border-collapse: collapse;
   margin: 20px;
-  width: fit-content;
+  width: 550px;
+  height: 550px;
 }
 
 td {
   aspect-ratio: 1;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border: 2px solid $border-color;
-  background-color: #ddd;
+  background-color: #26a0a2;
   text-align: center;
-  font-size: 1rem;
+  font-size: 17px;
   font-weight: bold;
   user-select: none;
   cursor: pointer;
   position: relative;
 
   &:active {
-    background-color: #eee;
+    background-color: #34dadd;
   }
 
   box-shadow: 2px 2px 5px $shadow-color,
               -2px -2px 5px $highlight-color;
 
   &[data-status='clear'] {
-    background-color: #fff;
+    background-color: $accent-color;
     box-shadow: none;
-    border: 1px solid #ccc;
     cursor: default;
   }
 
   &[data-status='flag'] {
-    background-color: #ddd;
+    background-color: #26a0a2;
     cursor: pointer;
-    
-
-    svg {
-      width: 80%;
-      height: 80%;
-      margin: auto;
-    }
   }
 
   &[data-status='mine'] {
     background-color: $mine-color;
     cursor: default;
-
-    svg {
-      width: 80%;
-      height: 80%;
-      margin: auto;
-      fill: #fff;
-    }
   }
 
   div {
@@ -186,23 +210,19 @@ td {
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
+  padding: 10px 10px;
+  font-family: 'GOST Type B';
+  font-size: 21px;
+  background-color: #114a4b;
+  color: $accent-color;
+  border: 2px solid $accent-color;
   cursor: pointer;
   border-radius: 5px;
 
   &:hover {
-    background-color: #3e8e41;
+    background-color: #249798;
+    color:black;
   }
-}
-
-svg {
-  width: 80%;
-  height: 80%;
-  margin: auto;
 }
 
 .game-info {
@@ -214,16 +234,13 @@ svg {
 .flag-counter {
   display: flex;
   align-items: center;
+  font-family: 'GOST Type B';
+  color: $accent-color;
   gap: 4px;
-  font-size: 1.2rem;
+  font-size: 20px;
   font-weight: bold;
   min-width: 80px;
   
-  svg {
-    width: 24px;
-    height: 24px;
-  }
-
   span {
     min-width: 24px;
     text-align: right;
@@ -238,8 +255,10 @@ svg {
 }
 
 .difficulty-label {
-  font-size: 1.1rem;
-  color: #333;
+  align-self: center;
+  font-family: 'GOST Type B';
+  color: $accent-color;
+  font-size: 22px;
   font-weight: 500;
 }
 

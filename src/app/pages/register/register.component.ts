@@ -10,6 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
+import { GameBackgroundComponent } from '../../features/background/background.component';
 
 @Component({
   selector: 'app-register',
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
     MatCheckboxModule,
     MatProgressSpinnerModule,
     NgIf,
+    GameBackgroundComponent
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
