@@ -6,16 +6,20 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class BaseApiService {
-    private apiUrl = 'http://127.0.0.1:5000';
+    private apiUrl = 'http://apisaper.hopto.org';
 
     constructor(
         private http: HttpClient
     ) { }
 
     private getHeaders(): HttpHeaders {
-        return new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
+        return new HttpHeaders(
+            {   
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'rejectUnauthorized': 'false'
+            }
+        );
     }
 
     get<T>(endpoint: string): Observable<T> {

@@ -6,6 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../../features/snackbar/snackbar.component';
 import { SnackbarData } from '../../interfaces/snackbardata.model';
+import { BaseApiService } from '../services/base-api.service';
 
 interface LoginResponse {
   access_token: string;
@@ -16,7 +17,7 @@ interface LoginResponse {
 })
 export class AuthService {
 
-  private baseUrl = 'http://127.0.0.1:5000';
+  private baseUrl = 'http://apisaper.hopto.org';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
@@ -25,11 +26,12 @@ export class AuthService {
   constructor(
     private http: HttpClient, 
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private baseApiService: BaseApiService
   ) { }
 
-  login(credentials: any): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, credentials).pipe(
+  login(credentials: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/login`, credentials).pipe(
       tap(response => {
         this.setToken(response.access_token);
       }),
