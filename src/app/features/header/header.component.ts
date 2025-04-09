@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, Output, ViewChild, } from '@angular/core';
+import { Component, ViewChild, } from '@angular/core';
 import { BurgerMenuComponent } from '../burger-menu/burger-menu.component';
 
 @Component({

@@ -122,7 +122,13 @@ $accent-color: #73cecf;
 .hint-buttons {
   button {
     width: 70px;
-    height: 45px;
+    height: 40px;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: #cccccc;
+    }
   }
 }
 

@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<div class="hint-buttons">
-					<button (click)="openMine()" [disabled]="isButtonFlagDisabled" title="Стоимость: 10. Ставит флаг на случайную мину.">
+					<button (click)="openMine()" [disabled]="isGameOver || isHintLoading" title="Стоимость: 10. Ставит флаг на случайную мину.">
 						<img src="assets/images/icon-bolt.png" alt="Bolt Icon" style="width:24px;height:24px">
 					</button>
 				</div>
