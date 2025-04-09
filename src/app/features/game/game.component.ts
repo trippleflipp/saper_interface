@@ -50,6 +50,7 @@ export class GameComponent implements OnInit, OnDestroy{
   GameDifficulty = GameDifficulty;
   remainingFlags = 0;
   isGameOver = false;
+  isButtonFlagDisabled: boolean = false;
   currentCoins: number;
   isHintLoading = false;
   
@@ -199,6 +200,7 @@ export class GameComponent implements OnInit, OnDestroy{
     }
 
     this.isHintLoading = true;
+    this.isButtonFlagDisabled = true;
     this.coinsService.open_mine().subscribe({
         next: (res: any) => {
             if (res.message === "ok") {

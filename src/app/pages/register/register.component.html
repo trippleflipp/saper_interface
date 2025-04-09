@@ -12,7 +12,7 @@
                                 appearance="outline" 
                                 class="form-field"
                                 hideRequiredMarker>
-                    <mat-label>Email</mat-label>
+                    <mat-label class="mdc-form-field-label">Email</mat-label>
                     <input matInput 
                            formControlName="email"
                            required>
@@ -26,7 +26,7 @@
                                 appearance="outline" 
                                 class="form-field"
                                 hideRequiredMarker>
-                    <mat-label>Логин</mat-label>
+                    <mat-label class="mdc-form-field-label">Логин</mat-label>
                     <input matInput
                            formControlName="username"
                            required>
@@ -39,7 +39,7 @@
                                 appearance="outline" 
                                 class="form-field"
                                 hideRequiredMarker>
-                    <mat-label>Пароль</mat-label>
+                    <mat-label class="mdc-form-field-label">Пароль</mat-label>
                     <input matInput 
                            [type]="hidePassword ? 'password' : 'text'"
                            formControlName="password">
@@ -60,7 +60,7 @@
                                 appearance="outline" 
                                 class="form-field"
                                 hideRequiredMarker>
-                    <mat-label>Подтверждение пароля</mat-label>
+                    <mat-label class="mdc-form-field-label">Подтверждение пароля</mat-label>
                     <input matInput 
                            [type]="hidePassword ? 'password' : 'text'"
                            formControlName="confirmPassword">
@@ -77,13 +77,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <div class="button-row">
-                    <button mat-raised-button
-                            class="button_login"
-                            type="button"
-                            (click)="redirectToLogin()">
-                            Уже есть аккаунт
-                    </button>
+                <div class="button-column">
                     <button mat-raised-button
                             class="button_login"
                             color="primary"
@@ -92,6 +86,12 @@
                             [disabled]="registerForm.invalid">
                         <span *ngIf="!loading">Зарегистрироваться</span>
                         <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+                    </button>
+                    <button mat-raised-button
+                            class="button_login"
+                            type="button"
+                            (click)="redirectToLogin()">
+                            Уже есть аккаунт
                     </button>
                 </div>
             </form>

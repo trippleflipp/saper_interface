@@ -1,6 +1,7 @@
 .burger-menu {
     user-select: none; 
     position: fixed;
+    font-size: 17px;
     top: 46px;
     left: 0;
     width: 250px;
@@ -8,7 +9,7 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transform: translateX(-100%);
     transition: transform 0.2s ease-out;
-    border-right: 5px solid rgb(115, 71, 0);
+    border-right: 5px solid rgb(83, 50, 0);
     z-index: 1000;
 }
 
