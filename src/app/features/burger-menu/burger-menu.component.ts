@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RulesDialogComponent } from '../rules-dialog/rules-dialog.component';
 import { Router } from '@angular/router';
@@ -20,7 +20,6 @@ import { SoundService } from '../../core/services/sound.service';
   styleUrl: './burger-menu.component.scss'
 })
 export class BurgerMenuComponent {
-
   isOpen: boolean = false;
   @Output() close = new EventEmitter<void>();
   

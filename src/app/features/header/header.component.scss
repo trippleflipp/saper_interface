@@ -3,8 +3,7 @@
     align-items: center;
     justify-content: center;
     background-color: rgba(115, 71, 0, 0.645);
-    border-bottom: 5px solid rgb(83, 50, 0);
-    height: 50px;
+    height: 46px;
     position: relative;
 }
 
@@ -24,7 +23,7 @@
     width: 40px;
     height: 40px;
     transition: transform 0.3s ease;
-    margin-left: 3px;
+    margin-left: 2px;
     
     &.rotate {
         transform: rotate(var(--rotation-direction));
