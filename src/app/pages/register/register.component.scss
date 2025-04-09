@@ -16,7 +16,8 @@ mat-card-title {
     font-family: 'GOST Type B';
     font-size: 40px;
     color: #38ecef;
-    padding-bottom: 10px;
+    padding-left: 45%;
+    padding-bottom: 10%;
 }
 
 .explanation {
@@ -28,34 +29,14 @@ mat-card-title {
     font-size: 20px;
     width: 100%;
     padding-bottom: 10px;
-
-    ::ng-deep .mat-mdc-form-field-outline {
-        color: #38ecef;
-    }
-    
-    // Изменение цвета при фокусе
-    ::ng-deep .mat-mdc-form-field-outline-thick {
-        color: #38ecef;
-    }
-    
-    // Изменение цвета текста
-    ::ng-deep .mat-mdc-input-element {
-        color: #38ecef;
-    }
-    
-    // Изменение цвета подписи
-    ::ng-deep .mat-mdc-form-field-label {
-        color: #38ecef;
-    }
-    ::ng-deep .mat-error {
-        color: #38ecef;
-    }
 }
 
 .button_login {
     font-family: 'GOST Type B';
     font-size: 20px;
-    gap: 10px;
+    font-weight: bold;
+    border: 2px solid #38ecef;
+    border-radius: 15px;
     margin: 10px;
     &:hover {
         background-color: #38ecef;
@@ -65,14 +46,15 @@ mat-card-title {
         background-color: #27adaf;
         color: black;
     }
+    &:disabled {
+        color: #38ecef;
+    }
 }
 
 .button-column {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    margin-bottom: 20px;
+    align-items: center;
 }
 
 mat-spinner {
@@ -80,4 +62,7 @@ mat-spinner {
     width: 20px;
     height: 20px;
     vertical-align: middle;
+}
+:host ::ng-deep .mat-icon{
+    color: #38ecef !important;
 }

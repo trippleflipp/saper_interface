@@ -5,3 +5,30 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mdc-text-field--outlined .mdc-notched-outline__leading,
+.mdc-text-field--outlined .mdc-notched-outline__notch,
+.mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-color: #38ecef !important;
+}
+.mdc-text-field--outlined.mdc-text-field--invalid .mdc-notched-outline__leading,
+.mdc-text-field--outlined.mdc-text-field--invalid .mdc-notched-outline__notch,
+.mdc-text-field--outlined.mdc-text-field--invalid .mdc-notched-outline__trailing {
+    border-color: #ff0000 !important;
+}
+.mat-mdc-form-field-error {
+    font-family: 'GOST Type B';
+    font-size: 15px;
+    font-weight: bold;
+    color: #ff0000 !important;
+}
+.mdc-form-field-label{
+    font-family: 'GOST Type B';
+    font-weight: bold;
+    font-size: 20px;
+    color: #38ecef !important;
+}
+.mdc-text-field__input{
+    color: #38ecef !important;
+}
+

@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
+import { GameBackgroundComponent } from '../../features/background/background.component';
 
 @Component({
   selector: 'app-forgot-password',
@@ -21,7 +22,8 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    GameBackgroundComponent
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'

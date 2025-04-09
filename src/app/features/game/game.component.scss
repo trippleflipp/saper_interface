@@ -13,14 +13,21 @@ $accent-color: #73cecf;
   height: 93%;
 }
 
+.detector {
+  position: absolute;
+  width: 930px;
+  height: 870px;
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.3);
+  z-index: -1;
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: rgb(14, 34, 36);
-  border: 4px solid rgba(64, 203, 208, 0.737);
-  border-radius: 8px;
-  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.3);
+  border: 8px solid rgba(64, 203, 208, 0.737);
+  border-radius: 70px;
   width: 800px;
   padding: 20px;
 }
@@ -100,10 +107,10 @@ $accent-color: #73cecf;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
   font-weight: 500;
-  width: 65px;
-  padding: 2px;
+  gap: 3px;
+  width: 75px;
+  padding: 4px;
   border: 2px solid #FFD700;
   border-radius: 5px;
 
@@ -113,8 +120,7 @@ $accent-color: #73cecf;
 }
 
 .hint-buttons {
-  display: flex;
-  align-items: center;
+  padding: 5px 0 0 20px;
   button {
     width: 70px;
     height: 45px;
@@ -233,7 +239,9 @@ button {
   gap: 4px;
   font-size: 20px;
   font-weight: bold;
-  min-width: 80px;
+  padding: 5px;
+  border: 2px solid #34dadd;
+  border-radius: 5px;
   
   span {
     min-width: 24px;

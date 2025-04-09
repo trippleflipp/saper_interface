@@ -46,6 +46,7 @@ export class GameComponent implements OnInit, OnDestroy{
   GameDifficulty = GameDifficulty;
   remainingFlags = 0;
   isGameOver = false;
+  isButtonFlagDisabled: boolean = false;
   currentCoins: number;
   
   private readonly difficultySettings: Record<GameDifficulty, DifficultySettings> = {
@@ -170,14 +171,17 @@ export class GameComponent implements OnInit, OnDestroy{
     if (this.gameStatus == GameStatus.started) {
       const hint = this.board.getHint();
       if (hint) {
+        this.isButtonFlagDisabled = true;
         this.coinsService.open_mine().subscribe((res: any) => {
           if (res.message == "ok") {
             hint.status = 'flag';
+            this.remainingFlags -= 1;
             this.gameService.updateCoins();
           }
           else if (res.message == "neok") {
             this.openSnackbar("Спасать нечего...", "Недостаточно средств", 3000);
           }
+          this.isButtonFlagDisabled = false;
         })
       }
       else this.openSnackbar("Спасатель монет", "Кажется подсказок нет...", 3000);

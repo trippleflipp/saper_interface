@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
+import { GameBackgroundComponent } from '../../features/background/background.component';
 
 @Component({
   selector: 'app-email-confirm',
@@ -19,7 +20,8 @@ import { AuthService } from '../../core/auth/auth.service';
     MatInputModule,
     NgIf,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    GameBackgroundComponent
   ],
   templateUrl: './email-confirm.component.html',
   styleUrl: './email-confirm.component.scss'

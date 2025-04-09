@@ -19,8 +19,7 @@ import { SoundService } from '../../core/services/sound.service';
   templateUrl: './burger-menu.component.html',
   styleUrl: './burger-menu.component.scss'
 })
-export class BurgerMenuComponent implements AfterViewInit {
-  @ViewChild(GameBackgroundComponent) backgroundComponent!: GameBackgroundComponent;
+export class BurgerMenuComponent {
 
   isOpen: boolean = false;
   @Output() close = new EventEmitter<void>();
@@ -32,12 +31,7 @@ export class BurgerMenuComponent implements AfterViewInit {
     private soundService: SoundService
   ) {}
 
-  ngAfterViewInit(): void {
-    this.backgroundComponent.backgroundType = 'burger';
-  }
-
   toggleMenu() {
-    this.backgroundComponent.backgroundType = 'burger';
     this.isOpen = !this.isOpen
   }
 

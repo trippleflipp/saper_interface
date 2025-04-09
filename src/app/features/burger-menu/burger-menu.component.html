@@ -1,6 +1,6 @@
 <div class="blackout" [class.active]="isOpen" (click)="closeMenu()"></div>
 <div class="burger-menu" [class.open]="isOpen">
-  <app-background></app-background>
+  <app-background [backgroundType]="'burger'"></app-background>
   <div class="menu-content">
     <ul>
       <li><a>Профиль</a></li>
