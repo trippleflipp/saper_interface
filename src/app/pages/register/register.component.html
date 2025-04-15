@@ -46,15 +46,47 @@
                     <button mat-icon-button
                             matSuffix
                             (click)="hidePassword = !hidePassword"
-                            [ariaLabel]="'Hide password'"
-                            [ariaPressed]="hidePassword">
+                            [attr.aria-label]="'Hide password'"
+                            [attr.aria-pressed]="hidePassword">
                         <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
-                    <mat-error *ngIf="registerForm.controls['password']?.invalid">
-                        <span *ngIf="registerForm.controls['password']?.errors?.['required']">Введите пароль</span>
-                        <span *ngIf="registerForm.controls['password']?.errors?.['minlength']">Длина пароля не менее 6 символов</span>
-                    </mat-error>
+                    <mat-hint class="password-hint">
+                        <div class="hint-row" [class.valid]="registerForm.controls['password']?.value?.length >= 8 && registerForm.controls['password']?.value?.length <= 32">
+                            <span>• Длина пароля от 8 до 32 символов</span>
+                        </div>
+                        <div class="hint-row" [class.valid]="hasUppercase(registerForm.controls['password']?.value)">
+                            <span>• Добавьте заглавную букву</span>
+                        </div>
+                        <div class="hint-row" [class.valid]="hasLowercase(registerForm.controls['password']?.value)">
+                            <span>• Добавьте строчную букву</span>
+                        </div>
+                        <div class="hint-row" [class.valid]="hasNumber(registerForm.controls['password']?.value)">
+                            <span>• Добавьте цифру</span>
+                        </div>
+                        <div class="hint-row" [class.valid]="hasSpecialChar(registerForm.controls['password']?.value)">
+                            <span>• Добавьте спецсимвол (!&#64;#$%^&* и др.)</span>
+                        </div>
+                        <div class="hint-row" [class.valid]="!registerForm.controls['password']?.errors?.['containsUsername']">
+                            <span>• Пароль содержит ваш логин</span>
+                        </div>
+                        <div class="hint-row" [class.valid]="!registerForm.controls['password']?.errors?.['containsEmail']">
+                            <span>• Пароль содержит ваш email</span>
+                        </div>
+                    </mat-hint>
                 </mat-form-field>
+
+                <div class="password-strength">
+                    <div class="strength-label">
+                        <span>Сложность пароля:</span>
+                        <span [style.color]="getPasswordStrength().color">{{ getPasswordStrength().label }}</span>
+                    </div>
+                    <div class="strength-bar">
+                        <div class="strength-fill" 
+                             [style.width.%]="getPasswordStrength().strength"
+                             [style.backgroundColor]="getPasswordStrength().color">
+                        </div>
+                    </div>
+                </div>
 
                 <mat-form-field subscriptSizing="dynamic"
                                 appearance="outline" 

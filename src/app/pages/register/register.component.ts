@@ -11,6 +11,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { GameBackgroundComponent } from '../../features/background/background.component';
+import { passwordValidator } from '../../core/validators/password.validator';
+import { PasswordStrengthService } from '../../shared/services/password-strength.service';
 
 @Component({
   selector: 'app-register',
@@ -32,12 +34,14 @@ import { GameBackgroundComponent } from '../../features/background/background.co
 export class RegisterComponent {
   registerForm: FormGroup;
   hidePassword: boolean = true;
+  hideConfirmPassword: boolean = true;
   loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private passwordStrengthService: PasswordStrengthService
   ) { }
 
   ngOnInit(): void {
@@ -54,11 +58,33 @@ export class RegisterComponent {
     return null;
   }
 
+  hasUppercase(password: string): boolean {
+    return /[A-Z]/.test(password);
+  }
+
+  hasLowercase(password: string): boolean {
+    return /[a-z]/.test(password);
+  }
+
+  hasNumber(password: string): boolean {
+    return /[0-9]/.test(password);
+  }
+
+  hasSpecialChar(password: string): boolean {
+    return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+  }
+
   initRegisterForm(): void {
     this.registerForm = this.fb.group({
       "email": ['', [Validators.required, Validators.email]],
       "username": ['', [Validators.required]],
-      "password": ['', [Validators.required, Validators.minLength(6)]],
+      "password": ['', [
+        Validators.required,
+        passwordValidator(
+          this.registerForm?.get('username')?.value,
+          this.registerForm?.get('email')?.value
+        )
+      ]],
       "confirmPassword": ['', [Validators.required, this.passwordMatchValidator.bind(this)]]
     })
   }
@@ -85,5 +111,11 @@ export class RegisterComponent {
 
   redirectToLogin(): void {
     this.router.navigate(['/login']);
+  }
+
+  getPasswordStrength() {
+    const password = this.registerForm?.get('password')?.value;
+    const email = this.registerForm?.get('email')?.value;
+    return this.passwordStrengthService.calculateStrength(password, email);
   }
 }
