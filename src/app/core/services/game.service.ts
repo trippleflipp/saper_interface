@@ -25,10 +25,10 @@ export class GameService {
     new_record(data: unknown) {
         this.baseApiService.post("/new_record", data).subscribe((res: any) => {
             if (res.message == "New record submitted and is in the top 10!") {
-                this.openSnackbar("Поздравляем!", "Вы нашли артефакт и попали в топ-10 игроков!", 3000);
-            }
-            else if (res.message == "New record submitted, but it is not in the top 10.") {
-                this.openSnackbar("Победа!", "Вы нашли артефакт.", 3000);
+                setTimeout(() => {
+                    this.openSnackbar("Поздравляем!", "Вы попали в топ-10 игроков!", 3000);
+                }, 2000);
+                
             }
             this.updateCoins();
             return res

@@ -12,7 +12,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { GameBackgroundComponent } from '../../features/background/background.component';
 import { passwordValidator } from '../../core/validators/password.validator';
-import { PasswordStrengthService } from '../../core/services/password-strength.service';
+import { PasswordHintComponent } from "../../features/password-hint/password-hint.component";
 
 @Component({
   selector: 'app-register',
@@ -26,8 +26,9 @@ import { PasswordStrengthService } from '../../core/services/password-strength.s
     MatCheckboxModule,
     MatProgressSpinnerModule,
     NgIf,
-    GameBackgroundComponent
-  ],
+    GameBackgroundComponent,
+    PasswordHintComponent
+],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -41,7 +42,6 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private passwordStrengthService: PasswordStrengthService
   ) { }
 
   ngOnInit(): void {
@@ -111,11 +111,5 @@ export class RegisterComponent {
 
   redirectToLogin(): void {
     this.router.navigate(['/login']);
-  }
-
-  getPasswordStrength() {
-    const password = this.registerForm?.get('password')?.value;
-    const email = this.registerForm?.get('email')?.value;
-    return this.passwordStrengthService.calculateStrength(password, email);
   }
 }

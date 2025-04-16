@@ -20,7 +20,7 @@ export class SoundService implements OnDestroy {
   private pendingMusicStart = false;
   private isGameActive = false;
   private readonly eventHandlers: { [key: string]: () => void };
-  public currentMusicPath: string = 'assets/sounds/background-music.mp3';
+  public currentMusicPath: string = 'assets/sounds/background-music.ogg';
 
   isMusicEnabled = true;
   isSoundEnabled = true;
@@ -210,7 +210,7 @@ export class SoundService implements OnDestroy {
     if (!this.isSoundEnabled) return;
 
     try {
-      const audio = new Audio(`assets/sounds/${soundName}.mp3`);
+      const audio = new Audio(`assets/sounds/${soundName}.ogg`);
       audio.volume = this.soundVolume;
       await audio.play();
     } catch (error) {
