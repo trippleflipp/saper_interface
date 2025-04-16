@@ -10,6 +10,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { GameBackgroundComponent } from '../../features/background/background.component';
+import { passwordValidator } from '../../core/validators/password.validator';
+import { PasswordStrengthService } from '../../core/services/password-strength.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -34,14 +36,22 @@ export class ForgotPasswordComponent implements OnInit {
   currentEmail: string;
   codeSent: boolean = false;
   hidePassword: boolean = true;
+  hideConfirmPassword: boolean = true;
   codeDigits: string[] = ['', '', '', '', '', ''];
   @ViewChildren('digitInput') digitInputs!: QueryList<ElementRef>;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private passwordStrengthService: PasswordStrengthService
+  ) {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validator: this.passwordMatchValidator });
+  }
 
   ngOnInit(): void {
     this.initRequestForm();
@@ -56,7 +66,10 @@ export class ForgotPasswordComponent implements OnInit {
   initResetForm() {
     this.form = this.fb.group({
       "code": ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
-      "password": ['', [Validators.required, Validators.minLength(6)]],
+      "password": ['', [
+        Validators.required,
+        passwordValidator('', this.currentEmail)
+      ]],
       "confirmPassword": ['', [Validators.required, this.passwordMatchValidator.bind(this)]]
     })
   }
@@ -146,5 +159,27 @@ export class ForgotPasswordComponent implements OnInit {
         console.error(error);
       }
     )
+  }
+
+  hasUppercase(password: string): boolean {
+    return /[A-Z]/.test(password);
+  }
+
+  hasLowercase(password: string): boolean {
+    return /[a-z]/.test(password);
+  }
+
+  hasNumber(password: string): boolean {
+    return /[0-9]/.test(password);
+  }
+
+  hasSpecialChar(password: string): boolean {
+    return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+  }
+
+  getPasswordStrength() {
+    const password = this.form?.get('password')?.value;
+    const email = this.form?.get('email')?.value;
+    return this.passwordStrengthService.calculateStrength(password, email);
   }
 }
