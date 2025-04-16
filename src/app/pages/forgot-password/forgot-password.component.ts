@@ -11,7 +11,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { GameBackgroundComponent } from '../../features/background/background.component';
 import { passwordValidator } from '../../core/validators/password.validator';
-import { PasswordStrengthService } from '../../shared/services/password-strength.service';
+import { PasswordStrengthService } from '../../core/services/password-strength.service';
 
 @Component({
   selector: 'app-forgot-password',

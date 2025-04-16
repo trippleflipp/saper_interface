@@ -2,47 +2,46 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function passwordValidator(username: string, email: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
-    if (!value) {
+    const password = control.value;
+
+    if (!password) {
       return null;
     }
 
-    // Check minimum and maximum length
-    if (value.length < 8) {
-      return { minLength: true };
+    const errors: ValidationErrors = {};
+
+    if (password.length < 8) {
+      errors['minLength'] = true;
     }
-    if (value.length > 32) {
-      return { maxLength: true };
+    if (password.length > 32) {
+      errors['maxLength'] = true;
     }
 
-    // Check for uppercase letters
-    if (!/[A-Z]/.test(value)) {
-      return { noUppercase: true };
+    if (!/[A-Z]/.test(password)) {
+      errors['noUppercase'] = true;
     }
 
-    // Check for lowercase letters
-    if (!/[a-z]/.test(value)) {
-      return { noLowercase: true };
+    if (!/[a-z]/.test(password)) {
+      errors['noLowercase'] = true;
     }
 
-    // Check for numbers
-    if (!/[0-9]/.test(value)) {
-      return { noNumber: true };
+    if (!/[0-9]/.test(password)) {
+      errors['noNumber'] = true;
     }
 
-    // Check for special characters
-    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value)) {
-      return { noSpecialChar: true };
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      errors['noSpecialChar'] = true;
     }
 
-    // Check if password contains username or email
-    if (username && value.toLowerCase().includes(username.toLowerCase())) {
-      return { containsUsername: true };
+    const lowerCasePassword = password.toLowerCase();
+
+    if (username && lowerCasePassword.includes(username.toLowerCase())) {
+      errors['containsUsername'] = true;
     }
-    if (email && value.toLowerCase().includes(email.toLowerCase())) {
-      return { containsEmail: true };
+    if (email && lowerCasePassword.includes(email.toLowerCase())) {
+      errors['containsEmail'] = true;
     }
 
-    return null;
-  };
-} 
+    return Object.keys(errors).length > 0 ? errors : null;
+  }
+}
