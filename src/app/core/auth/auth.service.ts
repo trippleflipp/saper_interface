@@ -17,7 +17,7 @@ interface LoginResponse {
 })
 export class AuthService {
 
-  private baseUrl = 'http://apisaper.hopto.org';
+  private baseUrl = 'https://saper-backend.onrender.com';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
@@ -119,7 +119,7 @@ export class AuthService {
     let errorMessage = "Неизвестная ошибка!";
     switch (true) {
       case error.error.message === "Username already exists":
-        errorMessage = "Пользователь с таким именем уже есть!";
+        errorMessage = "Пользователь с таким email уже существует!";
         break;
       case error.status === 401:
         errorMessage = "Проверьте вводимые данные";
