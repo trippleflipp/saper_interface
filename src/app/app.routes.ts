@@ -8,12 +8,14 @@ import { RoleGuard } from './core/auth/role.guard';
 import { LeaderTableComponent } from './pages/leader-table/leader-table.component';
 import { EmailConfirmComponent } from './pages/email-confirm/email-confirm.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'email_confirm', component: EmailConfirmComponent},
     { path: 'forgot_password', component: ForgotPasswordComponent},
+    { path: 'profile', component: ProfileComponent },
     { 
         path: 'home', 
         component: HomeComponent, 
