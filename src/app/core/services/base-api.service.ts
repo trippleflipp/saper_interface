@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class BaseApiService {
-    private apiUrl = 'http://apisaper.hopto.org';
+    private apiUrl = 'https://saper-backend.onrender.com';
 
     constructor(
         private http: HttpClient

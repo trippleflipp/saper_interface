@@ -11,7 +11,7 @@ import { CoinsService } from "./coins.service";
     providedIn: 'root'
 })
 export class GameService {
-    private apiUrl = 'http://apisaper.hopto.org';
+    private apiUrl = 'https://saper-backend.onrender.com';
     private coinsSubject = new BehaviorSubject<number>(0);
     coins$ = this.coinsSubject.asObservable();
 
