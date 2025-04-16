@@ -119,7 +119,7 @@ export class AuthService {
     let errorMessage = "Неизвестная ошибка!";
     switch (true) {
       case error.error.message === "Username already exists":
-        errorMessage = "Пользователь с таким именем уже есть!";
+        errorMessage = "Пользователь с таким email уже существует!";
         break;
       case error.status === 401:
         errorMessage = "Проверьте вводимые данные";

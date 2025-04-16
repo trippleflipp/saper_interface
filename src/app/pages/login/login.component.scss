@@ -60,6 +60,9 @@ mat-card-title {
         background-color: #27adaf;
         color: black;
     }
+    &:disabled {
+        color: #38ecef;
+    }
 }
 
 mat-spinner {

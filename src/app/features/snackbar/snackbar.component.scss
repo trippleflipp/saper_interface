@@ -1,11 +1,11 @@
 .snackbar-container {
     display: flex;
     flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
+    background-color: #114a4b;
+    color: #34dadd;
     border-radius: 4px;
     padding: 12px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'GOST Type B';
     font-weight: 300;
     box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
     line-height: 1.3;
@@ -19,30 +19,30 @@
   }
 
 .snackbar-title {
-    font-size: 16px;
+    font-size: 26px;
     font-weight: 400;
     margin: 0;
   }
 
 .snackbar-header button {
-    color: #bbdefb;
-    background-color: transparent;
-    border: none;
+    font-family: 'GOST Type B';
+    font-size: 24px;
+    color: #34dadd;
+    background-color: #114a4b;
+    border: 2px solid #34dadd;
     padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: 400;
-    font-size: 14px;
     outline: none;
     align-self: center;
   }
 
 .snackbar-header button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #249798;
   }
 
 .snackbar-content {
-    font-size: 14px;
+    font-size: 20px;
     text-align: justify;
-    margin-top: 0;
   }
