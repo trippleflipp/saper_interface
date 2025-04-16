@@ -86,8 +86,8 @@ export class GameComponent implements OnInit, OnDestroy{
   private initializeBoard(): void {
     const settings = this.difficultySettings[this.currentDifficulty];
     this.board = new Board(settings.size, settings.mines);
-    if (this.soundService.currentMusicPath !== 'assets/sounds/background-music.mp3') {
-      this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
+    if (this.soundService.currentMusicPath !== 'assets/sounds/background-music.ogg') {
+      this.soundService.changeBackgroundMusic('assets/sounds/background-music.ogg');
     }
     this.remainingFlags = settings.mines;
   }
@@ -112,7 +112,7 @@ export class GameComponent implements OnInit, OnDestroy{
       this.gameStatus = GameStatus.started;
       this.board.generateBoard(cell.row, cell.column);
       this.soundService.stopBackgroundMusic();
-      this.soundService.changeBackgroundMusic('assets/sounds/game_music.mp3');
+      this.soundService.changeBackgroundMusic('assets/sounds/game_music.ogg');
       this.timer.start();
       this.soundService.checkGameInteraction();
     }
@@ -132,7 +132,8 @@ export class GameComponent implements OnInit, OnDestroy{
     this.timer.stop();
     this.gameService.updateCoins();
     this.soundService.stopBackgroundMusic();
-    this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
+    this.soundService.playSound("defeat");
+    this.soundService.changeBackgroundMusic('assets/sounds/background-music.ogg');
     
     const randomPhrase = this.defeatPhrases[Math.floor(Math.random() * this.defeatPhrases.length)];
     
@@ -154,9 +155,9 @@ export class GameComponent implements OnInit, OnDestroy{
     this.timer.stop();
     this.confettiComponent.launchConfetti();
     this.soundService.stopBackgroundMusic();
-    this.soundService.changeBackgroundMusic('assets/sounds/background-music.mp3');
     this.soundService.playSound("victory");
-
+    this.soundService.changeBackgroundMusic('assets/sounds/background-music.ogg');
+    
     const randomPhrase = this.victoryPhrases[Math.floor(Math.random() * this.victoryPhrases.length)];
     this.openSnackbar(
       randomPhrase,

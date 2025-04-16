@@ -11,7 +11,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { GameBackgroundComponent } from '../../features/background/background.component';
 import { passwordValidator } from '../../core/validators/password.validator';
-import { PasswordStrengthService } from '../../core/services/password-strength.service';
+import { PasswordHintComponent } from "../../features/password-hint/password-hint.component";
 
 @Component({
   selector: 'app-forgot-password',
@@ -25,8 +25,9 @@ import { PasswordStrengthService } from '../../core/services/password-strength.s
     MatProgressSpinnerModule,
     MatIconModule,
     MatInputModule,
-    GameBackgroundComponent
-  ],
+    GameBackgroundComponent,
+    PasswordHintComponent
+],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
@@ -44,7 +45,6 @@ export class ForgotPasswordComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private passwordStrengthService: PasswordStrengthService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -175,11 +175,5 @@ export class ForgotPasswordComponent implements OnInit {
 
   hasSpecialChar(password: string): boolean {
     return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
-  }
-
-  getPasswordStrength() {
-    const password = this.form?.get('password')?.value;
-    const email = this.form?.get('email')?.value;
-    return this.passwordStrengthService.calculateStrength(password, email);
   }
 }
