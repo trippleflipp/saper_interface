@@ -3,7 +3,7 @@
   <app-background [backgroundType]="'burger'"></app-background>
   <div class="menu-content">
     <ul>
-      <li><a>Профиль</a></li>
+      <li (click)="openProfile()"><a>Профиль</a></li>
       <li (click)="openGame()"><a>Играть</a></li>
       <li (click)="openLeaderTable()"><a>Таблица лидеров</a></li>
       <li (click)="openRules()"><a>Правила</a></li>

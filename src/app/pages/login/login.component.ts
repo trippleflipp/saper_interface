@@ -31,8 +31,11 @@ import { GameBackgroundComponent } from '../../features/background/background.co
 export class LoginComponent implements OnInit{
 
   loginForm: FormGroup;
+  otpForm: FormGroup;
   hidePassword: boolean = true;
   loading: boolean = false;
+  show2faForm: boolean = false;
+  private tempCredentials: any;
 
   constructor(
     private fb: FormBuilder,
@@ -42,12 +45,19 @@ export class LoginComponent implements OnInit{
 
   ngOnInit(): void {
     this.initLoginForm();
+    this.initOtpForm();
   }
 
   initLoginForm(): void {
     this.loginForm = this.fb.group({
       "username": ['', [Validators.required]],
       "password": ['', [Validators.required, Validators.minLength(6)]]
+    })
+  }
+
+  initOtpForm(): void {
+    this.otpForm = this.fb.group({
+      "otp": ['', [Validators.required]]
     })
   }
 
@@ -61,15 +71,38 @@ export class LoginComponent implements OnInit{
 
   submitLogin(): void {
     this.loading = true;
+    this.tempCredentials = this.loginForm.value;
     this.authService.login(this.loginForm.value).subscribe(
       (res) => {
-        this.authService.setToken(res.access_token);
-        this.authService.navigate();
+        if (res.requires_2fa) {
+          this.show2faForm = true;
+          this.loading = false;
+        } else {
+          this.authService.navigate();
+        }
       },
       (error) => {
         this.initLoginForm();
         this.loading = false;
       }
     )
+  }
+
+  submit2fa(): void {
+    this.loading = true;
+    const data = {
+      ...this.tempCredentials,
+      otp: this.otpForm.value.otp
+    };
+    
+    this.authService.verify2faLogin(data).subscribe(
+      (res) => {
+        this.authService.navigate();
+      },
+      (error) => {
+        this.initOtpForm();
+        this.loading = false;
+      }
+    );
   }
 }

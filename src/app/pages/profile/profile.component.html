@@ -1,1 +1,59 @@
-<p>profile works!</p>
+<app-background [backgroundType]="'game'"></app-background>
+<app-header></app-header>
+<div class="wrapper">
+    <span class="title">Добро пожаловать, {{ username }}</span>
+    <div class="content-wrapper">
+        
+        <div *ngIf="!auth2fa" class="auth">
+            <span>
+                Google Authenticator:
+
+            </span>
+            <div *ngIf="is2faEnabled" class="status">
+                <div id="circle" class="green-circle"></div>
+                <button mat-raised-button
+                        disabled
+                        (click)="enable2fa()">
+                    Выключить
+                </button>
+            </div>
+            <div *ngIf="!is2faEnabled" class="status">
+                <div id="circle" class="red-circle"></div>
+                <button mat-raised-button
+                        (click)="enable2fa()">
+                    Включить
+                </button>
+            </div>
+        </div>
+
+        <mat-card>
+            <div *ngIf="auth2fa" class="auth2fa">
+                <img [src]="qrCodeData" class="qr">
+                <form [formGroup]="form" class="verify-form">
+                    <mat-form-field subscriptSizing="dynamic"
+                                    appearance="outline"
+                                    class="form-field"
+                                    hideRequiredMarker>
+                        <mat-label class="mdc-form-field-label">Код из Google Authenticator</mat-label>
+                        <input matInput
+                            formControlName="otp"
+                            required>
+                    </mat-form-field>
+                    <button mat-raised-button
+                            (click)="verify2fa()"
+                            [disabled]="form.invalid">
+                        Подтвердить
+                    </button>
+                </form>
+            </div>
+        </mat-card>
+
+        <div class="guide">
+            <span class="guide-title">Как включить двухфакторную аутентификацию?</span>
+            <span>1. Скачайте и установите <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=ru">Google Authenticator</a></span>
+            <span>2. Отсканируйте QR-код в приложении</span>
+            <span>3. Введите код из 6 цифр из приложения</span>
+            <span>4. Нажмите "Подтвердить" и наслаждайтесь :)</span>
+        </div>
+    </div>
+</div>

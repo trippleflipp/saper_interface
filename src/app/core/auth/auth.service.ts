@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { BaseApiService } from '../services/base-api.service';
 
 interface LoginResponse {
   access_token: string;
+  requires_2fa?: boolean;
 }
 
 @Injectable({
@@ -30,10 +31,12 @@ export class AuthService {
     private baseApiService: BaseApiService
   ) { }
 
-  login(credentials: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/login`, credentials).pipe(
+  login(credentials: any): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, credentials).pipe(
       tap(response => {
-        this.setToken(response.access_token);
+        if (!response.requires_2fa) {
+          this.setToken(response.access_token);
+        }
       }),
       catchError(this.handleError)
     );
@@ -70,6 +73,39 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  generateQr(): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/generate_qr`, { responseType: 'blob' })
+  }
+
+  verify2fa(data: any): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.http.post(`${this.baseUrl}/verify_2fa`, data, httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  enable2fa(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/generate_qr`).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  check2faStatus(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/status_2fa`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  disable2fa(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/generate_qr`).pipe(
+      catchError(this.handleError)
+    )
+  }
+
   getToken(): string | null {
     return localStorage.getItem('token');
   }
@@ -98,6 +134,20 @@ export class AuthService {
     return null;
   }
 
+  getUsernameFromToken(): string | null {
+    const token = this.getToken();
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.username || null;
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        return null;
+      }
+    }
+    return null;
+  }
+
   getProtectedData(): Observable<any> {
     return this.http.get(`${this.baseUrl}/protected`).pipe(
       catchError(this.handleError)
@@ -115,6 +165,15 @@ export class AuthService {
     }
   }
 
+  verify2faLogin(data: any): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/verify_2fa_login`, data).pipe(
+      tap(response => {
+        this.setToken(response.access_token);
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = "Неизвестная ошибка!";
     switch (true) {
@@ -123,6 +182,9 @@ export class AuthService {
         break;
       case error.status === 401:
         errorMessage = "Проверьте вводимые данные";
+        break;
+      case error.error.message === "Invalid Code":
+        errorMessage = "Неверный код подтверждения";
         break;
       default:
         break;
