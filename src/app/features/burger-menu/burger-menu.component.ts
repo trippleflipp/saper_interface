@@ -39,14 +39,19 @@ export class BurgerMenuComponent {
     this.close.emit();
   }
 
-  openLeaderTable() {
+  openProfile() {
     this.soundService.playSound("menu_click")
-    this.router.navigate(['/leader_table']);
+    this.router.navigate(['/profile'])
   }
 
   openGame() {
     this.soundService.playSound("menu_click")
     this.router.navigate(['/home']);
+  }
+
+  openLeaderTable() {
+    this.soundService.playSound("menu_click")
+    this.router.navigate(['/leader_table']);
   }
 
   openRules() {
