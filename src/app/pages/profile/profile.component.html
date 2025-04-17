@@ -12,15 +12,16 @@
             <div *ngIf="is2faEnabled" class="status">
                 <div id="circle" class="green-circle"></div>
                 <button mat-raised-button
-                        disabled
-                        (click)="enable2fa()">
+                        [disabled]="enableButton"
+                        (click)="disable2fa()">
                     Выключить
                 </button>
             </div>
             <div *ngIf="!is2faEnabled" class="status">
                 <div id="circle" class="red-circle"></div>
                 <button mat-raised-button
-                        (click)="enable2fa()">
+                        (click)="enable2fa()"
+                        [disabled]="!enableButton">
                     Включить
                 </button>
             </div>

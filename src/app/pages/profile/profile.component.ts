@@ -11,6 +11,9 @@ import { SnackbarData } from '../../interfaces/snackbardata.model';
 import { SnackbarComponent } from '../../features/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
+import { DisableConfirmComponent } from '../../features/disable-confirm/disable-confirm.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DisableService } from '../../core/services/disable.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,11 +35,14 @@ export class ProfileComponent implements OnInit {
   protected qrCodeData: string | null = null;
   auth2fa: boolean = false;
   is2faEnabled: boolean = false;
+  enableButton: boolean = false;
 
   constructor(
     private snackBar: MatSnackBar,
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private disableService: DisableService
   ) {}
 
   ngOnInit(): void {
@@ -48,12 +54,22 @@ export class ProfileComponent implements OnInit {
     this.form = this.fb.group({
       "otp": ['', [Validators.required]]
     })
+    this.disableService.functionCall$.subscribe(() => {
+      this.check2faStatus();
+    })
   }
 
   check2faStatus(): void {
     this.authService.check2faStatus().subscribe(
       (response) => {
-        this.is2faEnabled = response.message == 'enabled';
+        if (response.message == 'enabled') {
+          this.is2faEnabled = true;
+          this.enableButton = false;
+        }
+        else {
+          this.is2faEnabled = false;
+          this.enableButton = true;
+        }
       }
     );
   }
@@ -79,15 +95,11 @@ export class ProfileComponent implements OnInit {
   }
 
   disable2fa() {
-    this.authService.disable2fa().subscribe(
-      () => {
-        this.openSnackbar("2FA отключен", "Двухфакторная аутентификация успешно отключена", 3000);
-        this.check2faStatus();
-      },
-      (error) => {
-        this.openSnackbar("Ошибка", "Не удалось отключить 2FA", 3000);
-      }
-    );
+    this.dialog.open(DisableConfirmComponent, {
+          width: '50vw',
+          maxWidth: '90vw',
+          maxHeight: '90vh'
+    });
   }
 
   verify2fa() {

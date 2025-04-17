@@ -1,0 +1,27 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title class="dialog-title">Подтвердите отключение двухфакторной аутентификации</h2>
+    <div class="content">
+        <form [formGroup]="form">
+            <mat-form-field appearance="outline"
+                            hideRequiredMarker>
+                <mat-label>Код подтверждения из Google Authenticator</mat-label>
+                <input matInput formControlName="otp" type="text" required>
+                <mat-error *ngIf="form.controls['otp']?.invalid">
+                    Код подтверждения обязателен
+                </mat-error>
+            </mat-form-field>
+
+            <mat-checkbox class="checkbox" formControlName="check">Я уверен в том что хочу отключить двухфакторную аутентификацию</mat-checkbox>
+
+            <button [disabled]="form.invalid"
+                    mat-raised-button
+                    color="accent"
+                    (click)="disable2fa()">
+                    Отключить Google Authenticator
+            </button>
+        </form>
+    </div>
+    <div class="close-button">
+        <button mat-button (click)="closeDialog()">Закрыть</button>
+    </div>
+</div>

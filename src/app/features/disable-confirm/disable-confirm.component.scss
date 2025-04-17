@@ -1,0 +1,47 @@
+.dialog-container {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(29, 29, 29);
+    border-radius: 25px;
+    border: 5px solid rgb(83, 50, 0);
+}
+
+.dialog-title {
+    color: rgb(255, 187, 1) !important;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'GOST Type B';
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 30px;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    font-family: 'GOST Type B';
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+mat-checkbox {
+    margin-bottom: 10px;
+}
+
+:host ::ng-deep .mdc-label {
+    color: white;
+}
+
+
+.close-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin: 10px;
+}

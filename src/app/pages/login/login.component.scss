@@ -20,6 +20,14 @@ mat-card-title {
     padding: 0 0 10% 200%;
 }
 
+.verify {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .explanation {
     font-size: var(--mat-form-field-subscript-text-size, var(--mat-sys-body-small-size));
     margin-bottom: 10px;
