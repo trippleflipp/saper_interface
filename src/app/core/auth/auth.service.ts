@@ -101,7 +101,7 @@ export class AuthService {
   }
 
   disable2fa(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/generate_qr`).pipe(
+    return this.http.get(`${this.baseUrl}/disable_2fa`).pipe(
       catchError(this.handleError)
     )
   }

@@ -64,7 +64,7 @@
                 </div>
             </form>
 
-            <form [formGroup]="otpForm" (ngSubmit)="submit2fa()" *ngIf="show2faForm">
+            <form [formGroup]="otpForm" (ngSubmit)="submit2fa()" *ngIf="show2faForm" class="verify">
                 <mat-form-field appearance="outline">
                     <mat-label>Код подтверждения</mat-label>
                     <input matInput formControlName="otp" type="text" required>
