@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
@@ -18,50 +18,48 @@ interface LoginResponse {
 })
 export class AuthService {
 
-  private baseUrl = 'https://saper-backend.onrender.com';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
   public userRole$ = this.userRoleSubject.asObservable();
 
   constructor(
-    private http: HttpClient, 
     private router: Router,
     private snackBar: MatSnackBar,
     private baseApiService: BaseApiService
   ) { }
 
   login(credentials: any): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, credentials).pipe(
+    return this.baseApiService.post<LoginResponse>('login', credentials).pipe(
       tap(response => {
-        if (!response.requires_2fa) {
-          this.setToken(response.access_token);
-        }
+          if (!response.requires_2fa) {
+            this.setToken(response.access_token);
+          }
       }),
       catchError(this.handleError)
     );
-  }
+}
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, userData).pipe(
+    return this.baseApiService.post('/register', userData).pipe(
       catchError(this.handleError)
     );
   }
 
   confrimEmail(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/verify_email`, data).pipe(
+    return this.baseApiService.post('/verify_email', data).pipe(
       catchError(this.handleError)
     )
   }
 
   requestPasswordReset(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/request_password_reset`, data).pipe(
+    return this.baseApiService.post('/request_password_reset', data).pipe(
       catchError(this.handleError)
     )
   }
 
   resetPassword(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/reset_password`, data).pipe(
+    return this.baseApiService.post('/reset_password', data).pipe(
       catchError(this.handleError)
     )
   }
@@ -74,34 +72,29 @@ export class AuthService {
   }
 
   generateQr(): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/generate_qr`, { responseType: 'blob' })
-  }
+    return this.baseApiService.get('generate_qr', { responseType: 'blob' as 'json' });
+}
 
   verify2fa(data: any): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-    return this.http.post(`${this.baseUrl}/verify_2fa`, data, httpOptions).pipe(
+    return this.baseApiService.post('/verify_2fa', data).pipe(
       catchError(this.handleError)
-    );
+    )
   }
 
   enable2fa(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/generate_qr`).pipe(
+    return this.baseApiService.get('/generate_qr').pipe(
       catchError(this.handleError)
     )
   }
 
   check2faStatus(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/status_2fa`).pipe(
+    return this.baseApiService.get('/status_2fa').pipe(
       catchError(this.handleError)
     );
   }
 
   disable2fa(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/disable_2fa`).pipe(
+    return this.baseApiService.get('/disable_2fa').pipe(
       catchError(this.handleError)
     )
   }
@@ -148,12 +141,6 @@ export class AuthService {
     return null;
   }
 
-  getProtectedData(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/protected`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
   navigate(): void {
     const role = this.getRoleFromToken();
     if (role === 'admin') {
@@ -166,7 +153,7 @@ export class AuthService {
   }
 
   verify2faLogin(data: any): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/verify_2fa_login`, data).pipe(
+    return this.baseApiService.post<LoginResponse>('/verify_2fa_login', data).pipe(
       tap(response => {
         this.setToken(response.access_token);
       }),
