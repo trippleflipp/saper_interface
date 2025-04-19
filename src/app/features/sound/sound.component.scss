@@ -1,8 +1,8 @@
 .sound-control {
-    background-color: #ffffffd4;
+    background-color: #114a4bb9;
     display: flex;
     padding: 10px 0;
-    border: 2px solid rgb(115, 71, 0);
+    border: 2px solid #34dadd;
     border-radius: 10px;
     align-items: center;
     gap: 10px;
@@ -14,23 +14,23 @@
     position: relative;  // Add position relative
 
     &:hover {
-      background-color: #ffffffbd;
+      background-color: #114a4bd2;
     }
 
     mat-icon {
-      color: rgb(115, 71, 0);
+      color: #34dadd;
       font-size: 25px;
     }
 
     span {
-      color: #333;
+      color: #34dadd;
       font-family: 'GOST Type B';
       font-size: 25px;
     }
 
     mat-slider {
         width: 40px;
-        color: rgb(115, 71, 0);
+        color: #34dadd;
     }
 }
 

@@ -11,7 +11,7 @@
 
 .difficulty-toggle {
     margin-bottom: 20px;
-    background: rgba(144, 107, 52, 0.8);
+    background: #114a4bb9;
     border-radius: 8px;
     overflow: hidden;
     
@@ -19,7 +19,7 @@
         font-family: 'GOST Type B';
         font-weight: bold;
         font-size: 30px;
-        color: white;
+        color: #34dadd;
         background: transparent;
         
         &.mat-button-toggle-checked {

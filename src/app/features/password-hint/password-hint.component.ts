@@ -35,8 +35,7 @@ export class PasswordHintComponent implements OnInit, OnDestroy {
       this.hasUppercase(password) &&
       this.hasLowercase(password) &&
       this.hasNumber(password) &&
-      this.hasSpecialChar(password) &&
-      !this.form.controls['password'].errors?.['containsEmail'];
+      this.hasSpecialChar(password);
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {

@@ -1,29 +1,33 @@
 <app-background [backgroundType]="'game'"></app-background>
 <app-header></app-header>
 <div class="wrapper">
-    <span class="title">Добро пожаловать, {{ username }}</span>
+    <div class="welcome-container">
+        <span class="title">Добро пожаловать, {{ username }}</span>
+    </div>
+    <div class="time-wrapper">
+        <span>Ваш личный рекорд:</span>
+    </div>
+
     <div class="content-wrapper">
-        
         <div *ngIf="!auth2fa" class="auth">
             <span>
                 Google Authenticator:
-
             </span>
             <div *ngIf="is2faEnabled" class="status">
-                <div id="circle" class="green-circle"></div>
                 <button mat-raised-button
                         [disabled]="enableButton"
                         (click)="disable2fa()">
                     Выключить
                 </button>
+                <div id="circle" class="green-circle"></div>
             </div>
             <div *ngIf="!is2faEnabled" class="status">
-                <div id="circle" class="red-circle"></div>
                 <button mat-raised-button
                         (click)="enable2fa()"
                         [disabled]="!enableButton">
                     Включить
                 </button>
+                <div id="circle" class="red-circle"></div>
             </div>
         </div>
 
