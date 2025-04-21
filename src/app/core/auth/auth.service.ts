@@ -145,7 +145,8 @@ export class AuthService {
     const role = this.getRoleFromToken();
     if (role === 'admin') {
       this.router.navigate(['/admin']);
-    } else if (role === 'player') {
+    } 
+    else if (role === 'player') {
       this.router.navigate(['/home']);
     } else {
       this.router.navigate(['/login']);

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameBackgroundComponent } from "../../features/background/background.component";
 import { HeaderComponent } from "../../features/header/header.component";
 import { AuthService } from '../../core/auth/auth.service';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +14,15 @@ import { MatCardModule } from '@angular/material/card';
 import { DisableConfirmComponent } from '../../features/disable-confirm/disable-confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DisableService } from '../../core/services/disable.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { GameService } from '../../core/services/game.service';
+import { map, Observable } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
+
+interface PersonalRecord {
+  milliseconds: number;
+  difficulty: string;
+}
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +34,9 @@ import { DisableService } from '../../core/services/disable.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -36,16 +47,20 @@ export class ProfileComponent implements OnInit {
   auth2fa: boolean = false;
   is2faEnabled: boolean = false;
   enableButton: boolean = false;
+  pending: boolean = false;
+  records: PersonalRecord[] | null = null;
 
   constructor(
     private snackBar: MatSnackBar,
     private authService: AuthService,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private disableService: DisableService
+    private disableService: DisableService,
+    private gameService: GameService
   ) {}
 
   ngOnInit(): void {
+    this.getPersonalRecords();
     this.initForm();
     this.check2faStatus();
   }
@@ -56,6 +71,15 @@ export class ProfileComponent implements OnInit {
     })
     this.disableService.functionCall$.subscribe(() => {
       this.check2faStatus();
+    })
+    this.pending = false;
+  }
+
+  getPersonalRecords(): void {
+    this.gameService.get_personal_records().subscribe((res) => {
+      if (res.length > 0) {
+        this.records = res;
+      }
     })
   }
 
@@ -103,6 +127,7 @@ export class ProfileComponent implements OnInit {
   }
 
   verify2fa() {
+    this.pending = true;
     const otp = String(this.form.value.otp)
     this.authService.verify2fa({
       'otp': otp
@@ -136,5 +161,13 @@ export class ProfileComponent implements OnInit {
       data,
       duration: undefined
     });
+  }
+
+  formatTime(milliseconds: number): string {
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    const ms = milliseconds % 1000;
+
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
   }
 }
