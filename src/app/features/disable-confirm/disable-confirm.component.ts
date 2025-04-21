@@ -12,6 +12,7 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DisableService } from '../../core/services/disable.service';
 import { catchError, EMPTY, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-disable-confirm',
@@ -22,7 +23,8 @@ import { catchError, EMPTY, Observable, of, switchMap, tap, throwError } from 'r
     MatCheckboxModule,
     MatInputModule,
     MatFormFieldModule,
-    NgIf
+    NgIf,
+    MatProgressSpinnerModule
   ],
   templateUrl: './disable-confirm.component.html',
   styleUrl: './disable-confirm.component.scss'
@@ -30,6 +32,7 @@ import { catchError, EMPTY, Observable, of, switchMap, tap, throwError } from 'r
 export class DisableConfirmComponent implements OnInit {
   @Output() checkStatus = new EventEmitter<any>();
   form: FormGroup;
+  pending: boolean = false;
 
   constructor(
     private dialogRef: MatDialogRef<DisableConfirmComponent>,
@@ -48,9 +51,11 @@ export class DisableConfirmComponent implements OnInit {
       'otp': ['', [Validators.required]],
       'check': [false, [Validators.requiredTrue]]
     })
+    this.pending = false;
   }
 
   disable2fa(): void {
+    this.pending = true;
     this.check2faAndProceed().pipe(
       catchError(error => {
         console.error("Error during 2FA disable process:", error);

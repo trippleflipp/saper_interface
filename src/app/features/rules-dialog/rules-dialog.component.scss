@@ -1,13 +1,13 @@
 .dialog-container {
     display: flex;
     flex-direction: column;
-    background-color: rgb(29, 29, 29);
+    background-color: #0a2b2b;
     border-radius: 25px;
-    border: 5px solid rgb(83, 50, 0);
+    border: 5px solid #34dadd;
 }
 
 .dialog-title {
-    color: rgb(255, 187, 1) !important;
+    color: #34dadd !important;
     text-align: center;
     font-weight: bold;
     font-family: 'GOST Type B';
@@ -28,7 +28,7 @@
 }
 
 h3 {
-    color: rgb(255, 187, 1);
+    color: #34dadd;
     margin-top: 0px;
     padding: 15px 15px 0 0;
     font-size: 25px;

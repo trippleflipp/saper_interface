@@ -13,11 +13,12 @@
 
             <mat-checkbox class="checkbox" formControlName="check">Я уверен в том что хочу отключить двухфакторную аутентификацию</mat-checkbox>
 
-            <button [disabled]="form.invalid"
-                    mat-raised-button
+            <button mat-raised-button
                     color="accent"
+                    [disabled]="pending || form.invalid"
                     (click)="disable2fa()">
-                    Отключить Google Authenticator
+                    <span *ngIf="!pending">Отключить Google Authenticator</span>
+                    <mat-spinner *ngIf="pending" diameter="20"></mat-spinner>
             </button>
         </form>
     </div>

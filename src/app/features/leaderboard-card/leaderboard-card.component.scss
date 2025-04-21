@@ -15,7 +15,7 @@
         font-family: 'GOST Type B';
         font-weight: bold;
         margin: 10px;
-        color: white;
+        color: #34dadd;
         font-size: 30px;
     }
 
@@ -24,9 +24,12 @@
         font-weight: bold;
         font-family: 'GOST Type B';
         font-size: 21px;
+        color: #34dadd;
     }
 
     table {
-        background-color: rgba(190, 190, 190, 0.534);
+        border: 2px solid #34dadd;
+        border-radius: 10px;
+        background-color: inherit;
     }
 }

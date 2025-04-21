@@ -9,7 +9,7 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transform: translateX(-100%);
     transition: transform 0.2s ease-out;
-    border-right: 5px solid rgb(83, 50, 0);
+    border-right: 5px solid #114a4bb9;
     z-index: 1000;
 }
 
@@ -31,16 +31,15 @@
 }
 
 .menu-content li {
-    background-color: #ffffffd5;
+    background-color: #114a4bb9;
     text-align: center;
     padding: 10px 10px;
     margin: 10px 0;
-    border: 2px solid rgb(115, 71, 0);
+    border: 2px solid #34dadd;
     border-radius: 10px;
-    gap: 10px;
 
     &:hover {
-        background-color: #ffffffa1;
+        background-color: #114a4bd2;
     }
     &:active {
         background-color: #696969a1;
@@ -50,8 +49,7 @@
 .menu-content a {
     text-align: center;
     text-decoration: none;
-    color: #333;
-    font-weight: bold;
+    color: #34dadd;
     cursor: pointer;
 }
 
@@ -59,6 +57,7 @@
     display: flex;
     align-items: center;
     align-self: flex-end;
+    color: #34dadd;
 }
 
 .blackout {

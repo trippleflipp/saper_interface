@@ -34,26 +34,26 @@
                         <span *ngIf="registerForm.controls['username']?.errors?.['required']">Введите логин</span>
                     </mat-error>
                 </mat-form-field>
-
-                <mat-form-field subscriptSizing="dynamic"
-                                appearance="outline" 
-                                class="form-field"
-                                hideRequiredMarker>
-                    <mat-label class="mdc-form-field-label">Пароль</mat-label>
-                    <input matInput 
-                           [type]="hidePassword ? 'password' : 'text'"
-                           formControlName="password">
-                    <button mat-icon-button
-                            matSuffix
-                            (click)="hidePassword = !hidePassword"
-                            [attr.aria-label]="'Hide password'"
-                            [attr.aria-pressed]="hidePassword">
-                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                    
+                <div class="form-field">
+                    <mat-form-field subscriptSizing="dynamic"
+                                    appearance="outline" 
+                                    class="form-field"
+                                    style="padding-bottom:0"
+                                    hideRequiredMarker>
+                        <mat-label class="mdc-form-field-label">Пароль</mat-label>
+                        <input matInput 
+                            [type]="hidePassword ? 'password' : 'text'"
+                            formControlName="password">
+                        <button mat-icon-button
+                                matSuffix
+                                (click)="hidePassword = !hidePassword"
+                                [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hidePassword">
+                            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
                     <app-password-hint [form]="registerForm"></app-password-hint>
-                </mat-form-field>
-
+                </div>
                 <mat-form-field subscriptSizing="dynamic"
                                 appearance="outline" 
                                 class="form-field"

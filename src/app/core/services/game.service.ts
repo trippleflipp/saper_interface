@@ -35,6 +35,10 @@ export class GameService {
         return this.baseApiService.get('/get_records');
     }
 
+    get_personal_records(): Observable<any> {
+        return this.baseApiService.get('/get_personal_records');
+    }
+
     updateCoins() {
         this.coinsService.get_coins().subscribe((res: any) => {
             this.coinsSubject.next(res.coins);
