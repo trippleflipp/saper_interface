@@ -7,9 +7,9 @@
     <div *ngIf="records" class="time-wrapper">
         <span>Ваши рекорды:</span>
         <div class="record">
-            <span *ngIf="records![0]" id="rec" class="hard"> Сложный: {{ formatTime(records![0].milliseconds) }} </span>
-            <span *ngIf="records![2]" id="rec" class="medium"> Средний: {{ formatTime(records![2].milliseconds) }} </span>
-            <span *ngIf="records![1]" id="rec" class="easy"> Легкий: {{ formatTime(records![1].milliseconds) }} </span>
+            <span *ngIf="records![2]" id="rec" class="hard"> Сложный: {{ formatTime(records![2].milliseconds) }} </span>
+            <span *ngIf="records![1]" id="rec" class="medium"> Средний: {{ formatTime(records![1].milliseconds) }} </span>
+            <span *ngIf="records![0]" id="rec" class="easy"> Легкий: {{ formatTime(records![0].milliseconds) }} </span>
             <div class="trophy" 
                 *ngIf="records!.length == 3"
                 title="У вас есть рекорд в каждой сложности!">
