@@ -1,0 +1,36 @@
+<app-background [backgroundType]="'game'"></app-background>
+<app-header></app-header>
+<div class="wrapper">
+  <div class="shop-container">
+    <h1>Showcase</h1>
+    <div class="showcase">
+      <div class="backgrounds-showcase" [class.sliding-left]="direction === 'left'" [class.sliding-right]="direction === 'right'">
+        <div class="background-card" *ngFor="let background of visibleBackgrounds; let i = index"
+             [class.active]="i === 1"
+             [class.prev]="i === 0"
+             [class.next]="i === 2">
+          <div class="card-wrapper">
+            <img [src]="background.imageUrl" [alt]="background.name">
+            <div class="nav-buttons" *ngIf="i === 1">
+              <button class="nav-circle" (click)="previousBackground()">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <button class="nav-circle" (click)="nextBackground()">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+            <div class="card-content">
+              <h2>{{ background.name }}</h2>
+              <p>{{ background.price }} монет</p>
+              <button mat-raised-button
+                      [disabled]="background.owned"
+                      (click)="purchaseBackground(background)">
+                {{ background.owned ? 'Куплено' : 'Купить' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

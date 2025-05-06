@@ -54,6 +54,11 @@ export class BurgerMenuComponent {
     this.router.navigate(['/leader_table']);
   }
 
+  openShop() {
+    this.soundService.playSound("menu_click")
+    this.router.navigate(['/shop']);
+  }
+
   openRules() {
     this.soundService.playSound("menu_click")
     this.dialog.open(RulesDialogComponent, {
