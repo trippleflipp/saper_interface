@@ -1,0 +1,38 @@
+<app-background [backgroundType]="'game'"></app-background>
+<app-header></app-header>
+<div class="wrapper">
+  <div class="shop-container">
+    <div class="showcase">
+      <div class="backgrounds-showcase" [class.sliding-left]="direction === 'left'" [class.sliding-right]="direction === 'right'">
+        <div class="background-card" *ngFor="let background of visibleBackgrounds; let i = index"
+             [class.active]="i === 1"
+             [class.prev]="i === 0"
+             [class.next]="i === 2">
+          <div class="card-wrapper">
+            <img [src]="background.imageUrl" [alt]="background.name">
+            <div class="nav-buttons" *ngIf="i === 1">
+              <button class="nav-circle" (click)="previousBackground()">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <button class="nav-circle" (click)="nextBackground()">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+            <div class="card-content">
+              <h2>{{ background.name }}</h2>
+              <p>{{ background.price }} монет</p>
+              <button mat-raised-button
+                      [disabled]="false"
+                      (click)="purchaseBackground(background)">
+                {{ background.owned ? 'Выбрать фон' : 'Купить' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="backgrounds.length === 0" class="loading-message">
+        Загрузка фонов...
+      </div>
+    </div>
+  </div>
+</div> 

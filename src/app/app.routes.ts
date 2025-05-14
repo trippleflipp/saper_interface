@@ -9,6 +9,7 @@ import { LeaderTableComponent } from './pages/leader-table/leader-table.componen
 import { EmailConfirmComponent } from './pages/email-confirm/email-confirm.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { ShopComponent } from './pages/shop/shop.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
     { path: 'email_confirm', component: EmailConfirmComponent},
     { path: 'forgot_password', component: ForgotPasswordComponent},
     { path: 'profile', component: ProfileComponent },
+    { path: 'shop', component: ShopComponent },
     { 
         path: 'home', 
         component: HomeComponent, 
