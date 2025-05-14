@@ -5,7 +5,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { NgFor, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { BackgroundService, BackgroundTheme } from '../../services/background.service';
+import { BackgroundService, BackgroundTheme, MOCK_BACKGROUNDS } from '../../services/background.service';
+
+interface AvailableBackgroundsResponse {
+  available_bg: string;
+}
 
 @Component({
   selector: 'app-shop',
@@ -36,8 +40,21 @@ export class ShopComponent implements OnInit {
 
   private loadBackgrounds() {
     this.backgroundService.getAvailableBackgrounds().subscribe(
-      (backgrounds) => {
-        this.backgrounds = backgrounds;
+      (response: AvailableBackgroundsResponse) => {
+        console.log('Ответ от сервера:', response);
+        // Преобразуем строку в массив ID
+        const ownedIds = response.available_bg ? 
+          response.available_bg.split(',').filter((id: string) => id !== '') : [];
+        console.log('Массив ID купленных фонов:', ownedIds);
+        this.backgrounds = MOCK_BACKGROUNDS.map((bg: BackgroundTheme) => {
+          const isOwned = ownedIds.includes(bg.id.toString());
+          console.log(`Фон ${bg.id} (${bg.name}): owned = ${isOwned}`);
+          return {
+            ...bg,
+            owned: isOwned
+          };
+        });
+        console.log('Итоговый массив фонов:', this.backgrounds);
       },
       (error) => {
         console.error('Ошибка при загрузке фонов:', error);
@@ -46,6 +63,9 @@ export class ShopComponent implements OnInit {
   }
 
   get visibleBackgrounds(): BackgroundTheme[] {
+    if (this.backgrounds.length === 0) {
+      return [];
+    }
     const result = [];
     for (let i = -1; i <= 1; i++) {
       const index = this.normalizeIndex(this.currentIndex + i);
