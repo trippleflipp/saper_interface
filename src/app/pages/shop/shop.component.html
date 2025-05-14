@@ -2,7 +2,6 @@
 <app-header></app-header>
 <div class="wrapper">
   <div class="shop-container">
-    <h1>Showcase</h1>
     <div class="showcase">
       <div class="backgrounds-showcase" [class.sliding-left]="direction === 'left'" [class.sliding-right]="direction === 'right'">
         <div class="background-card" *ngFor="let background of visibleBackgrounds; let i = index"
@@ -23,13 +22,16 @@
               <h2>{{ background.name }}</h2>
               <p>{{ background.price }} монет</p>
               <button mat-raised-button
-                      [disabled]="background.owned"
+                      [disabled]="false"
                       (click)="purchaseBackground(background)">
-                {{ background.owned ? 'Куплено' : 'Купить' }}
+                {{ background.owned ? 'Выбрать фон' : 'Купить' }}
               </button>
             </div>
           </div>
         </div>
+      </div>
+      <div *ngIf="backgrounds.length === 0" class="loading-message">
+        Загрузка фонов...
       </div>
     </div>
   </div>

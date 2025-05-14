@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { BackgroundService } from '../../services/background.service';
 
 @Component({
   selector: 'app-background',
@@ -6,7 +7,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './background.component.html',
   styleUrls: ['./background.component.scss']
 })
-export class GameBackgroundComponent {
+export class GameBackgroundComponent implements OnInit {
   public _backgroundType: 'game' | 'auth' | 'burger';
 
   backgrounds = {
@@ -15,6 +16,18 @@ export class GameBackgroundComponent {
     auth: 'assets/images/auth-bg.jpg'
   };
 
+  constructor(private backgroundService: BackgroundService) {}
+
+  ngOnInit() {
+    this.setBackground();
+  }
+
+  setBackground() {
+    if (this._backgroundType === 'game') {
+      this.backgrounds.game = this.backgroundService.getSelectedBackground();
+    }
+  }
+
   get currentBackground(): string {
     return this.backgrounds[this._backgroundType];
   }
@@ -22,6 +35,9 @@ export class GameBackgroundComponent {
   @Input() set backgroundType(value: 'game' | 'auth' | 'burger') {
     setTimeout(() => {
       this._backgroundType = value;
+      if (value === 'game') {
+        this.backgrounds.game = this.backgroundService.getSelectedBackground();
+      }
     });
   }
 }

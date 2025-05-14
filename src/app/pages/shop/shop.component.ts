@@ -1,18 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../../features/header/header.component";
 import { GameBackgroundComponent } from '../../features/background/background.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-
-interface BackgroundTheme {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl: string;
-  owned: boolean;
-}
+import { BackgroundService, BackgroundTheme } from '../../services/background.service';
 
 @Component({
   selector: 'app-shop',
@@ -23,45 +16,34 @@ interface BackgroundTheme {
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    NgFor
+    NgFor,
+    NgIf
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss'
 })
-export class ShopComponent {
-  backgrounds: BackgroundTheme[] = [
-    {
-      id: 1,
-      name: 'Тёмный лес',
-      price: 1000,
-      imageUrl: 'assets/images/shop/background1.jpg',
-      owned: false
-    },
-    {
-      id: 2,
-      name: 'Заброшенный бункер',
-      price: 1500,
-      imageUrl: 'assets/images/shop/background2.jpg',
-      owned: false
-    },
-    {
-      id: 3,
-      name: 'Заброшенная деревня',
-      price: 2000,
-      imageUrl: 'assets/images/shop/background3.jpg',
-      owned: false
-    },
-    {
-      id: 4,
-      name: 'Болото',
-      price: 2500,
-      imageUrl: 'assets/images/shop/background4.jpg',
-      owned: false
-    }
-  ];
-
+export class ShopComponent implements OnInit {
+  @ViewChild(GameBackgroundComponent) backgroundComponent: GameBackgroundComponent;
+  backgrounds: BackgroundTheme[] = [];
   currentIndex = 0;
   direction: 'left' | 'right' | null = null;
+
+  constructor(private backgroundService: BackgroundService) {}
+
+  ngOnInit() {
+    this.loadBackgrounds();
+  }
+
+  private loadBackgrounds() {
+    this.backgroundService.getAvailableBackgrounds().subscribe(
+      (backgrounds) => {
+        this.backgrounds = backgrounds;
+      },
+      (error) => {
+        console.error('Ошибка при загрузке фонов:', error);
+      }
+    );
+  }
 
   get visibleBackgrounds(): BackgroundTheme[] {
     const result = [];
@@ -90,7 +72,26 @@ export class ShopComponent {
   }
 
   purchaseBackground(background: BackgroundTheme) {
-    // TODO: Implement purchase logic
-    console.log(`Purchasing background: ${background.name}`);
+    if (background.owned) {
+      this.selectBackground(background);
+    } else {
+      this.backgroundService.purchaseBackground(background).subscribe(
+        (response) => {
+          background.owned = true;
+          this.selectBackground(background);
+          
+        },
+        (error) => {
+          console.error('Ошибка при покупке фона:', error);
+        }
+      );
+    }
+  }
+
+  selectBackground(background: BackgroundTheme) {
+    this.backgroundService.setSelectedBackground(background.imageUrl);
+    if (this.backgroundComponent) {
+      this.backgroundComponent.setBackground();
+    }
   }
 } 
