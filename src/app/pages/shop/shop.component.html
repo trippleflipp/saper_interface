@@ -8,7 +8,7 @@
              [class.active]="i === 1"
              [class.prev]="i === 0"
              [class.next]="i === 2">
-          <div class="card-wrapper">
+          <div class="card-wrapper" *ngIf="background">
             <img [src]="background.imageUrl" [alt]="background.name">
             <div class="nav-buttons" *ngIf="i === 1">
               <button class="nav-circle" (click)="previousBackground()">

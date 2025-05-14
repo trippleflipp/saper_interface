@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { BaseApiService } from '../core/services/base-api.service';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 export interface BackgroundTheme {
   id: number;
@@ -12,7 +12,11 @@ export interface BackgroundTheme {
   owned: boolean;
 }
 
-const MOCK_BACKGROUNDS: BackgroundTheme[] = [
+interface AvailableBackgroundsResponse {
+  available_bg: string;
+}
+
+export const MOCK_BACKGROUNDS: BackgroundTheme[] = [
   {
     id: 1,
     name: 'Тёмный лес',
@@ -62,13 +66,8 @@ export class BackgroundService {
     localStorage.setItem(this.STORAGE_KEY, backgroundUrl);
   }
 
-  getAvailableBackgrounds(): Observable<BackgroundTheme[]> {
-    const ownedBackgrounds = JSON.parse(localStorage.getItem('owned_backgrounds') || '[]');
-    const backgrounds = MOCK_BACKGROUNDS.map(bg => ({
-      ...bg,
-      owned: ownedBackgrounds.includes(bg.id)
-    }));
-    return of(backgrounds);
+  getAvailableBackgrounds(): Observable<AvailableBackgroundsResponse> {
+    return this.baseAPIService.get<AvailableBackgroundsResponse>('/get_available_bg');
   }
 
   purchaseBackground(background: BackgroundTheme): Observable<any> {
