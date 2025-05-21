@@ -82,7 +82,6 @@ export class LoginComponent implements OnInit{
         }
       },
       (error) => {
-        this.initLoginForm();
         this.loading = false;
       }
     )

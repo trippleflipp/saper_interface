@@ -103,7 +103,6 @@ export class RegisterComponent {
         });
       },
       (error) => {
-        this.initRegisterForm();
         this.loading = false;
       }
     )

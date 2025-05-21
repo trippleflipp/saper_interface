@@ -136,11 +136,13 @@ export class ProfileComponent implements OnInit {
         this.openSnackbar("Ошибка", "Неверный код!", 3000);
         this.auth2fa = false;
         this.check2faStatus();
+        this.pending = false;
       }
       if (res.message == "Success") {
         this.openSnackbar("2fa Подключен!", "Теперь авторизация будет проходить через Google Authenticator!", 5000);
         this.auth2fa = false;
         this.check2faStatus();
+        this.pending = false;
       }
     })
   }

@@ -1,5 +1,7 @@
 @use '../../../styles.scss';
 
+$accent-color: #73cecf;
+
 .wrapper {
   height: calc(100% - 46px);
   padding: 20px;
@@ -221,3 +223,22 @@
   font-size: 1.2rem;
   color: #34dadd;
 } 
+
+.coins-counter {
+  font-family: 'GOST Type B';
+  color: $accent-color;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  gap: 3px;
+  width: 75px;
+  padding: 4px;
+  border: 2px solid #FFD700;
+  border-radius: 5px;
+
+  svg {
+    margin: 0;
+  }
+}
