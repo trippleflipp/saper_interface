@@ -4,6 +4,17 @@
   <div class="shop-container">
     <div class="showcase">
       <div class="backgrounds-showcase" [class.sliding-left]="direction === 'left'" [class.sliding-right]="direction === 'right'">
+        <div class="coins">
+          <div class="coins-counter">
+						<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+							<path 
+								fill="#FFD700" 
+								d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A1,1 0 0,1 9,12V9A1,1 0 0,1 10,8H11V7H13V8H15V10H11V11H14A1,1 0 0,1 15,12V15A1,1 0 0,1 14,16H13V17H11Z"
+							/>
+						</svg>
+						<span>{{ currentCoins }}</span>
+					</div>
+        </div>
         <div class="background-card" *ngFor="let background of visibleBackgrounds; let i = index"
              [class.active]="i === 1"
              [class.prev]="i === 0"
@@ -22,9 +33,9 @@
               <h2>{{ background.name }}</h2>
               <p>{{ background.price }} монет</p>
               <button mat-raised-button
-                      [disabled]="false"
+                      [disabled]="!background.owned && currentCoins < background.price || background.selected"
                       (click)="purchaseBackground(background)">
-                {{ background.owned ? 'Выбрать фон' : 'Купить' }}
+                {{ background.selected ? 'Фон выбран' : (background.owned ? 'Выбрать фон' : 'Купить') }}
               </button>
             </div>
           </div>

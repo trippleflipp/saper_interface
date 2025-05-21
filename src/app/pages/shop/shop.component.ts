@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../../features/header/header.component";
 import { GameBackgroundComponent } from '../../features/background/background.component';
 import { MatCardModule } from '@angular/material/card';
@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgFor, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { BackgroundService, BackgroundTheme, MOCK_BACKGROUNDS } from '../../services/background.service';
+import { Subscription } from 'rxjs';
+import { GameService } from '../../core/services/game.service';
 
 interface AvailableBackgroundsResponse {
   available_bg: string;
@@ -26,16 +28,29 @@ interface AvailableBackgroundsResponse {
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss'
 })
-export class ShopComponent implements OnInit {
+export class ShopComponent implements OnInit, OnDestroy {
   @ViewChild(GameBackgroundComponent) backgroundComponent: GameBackgroundComponent;
   backgrounds: BackgroundTheme[] = [];
   currentIndex = 0;
   direction: 'left' | 'right' | null = null;
+  currentCoins: number;
+  coinsSubscription = new Subscription;
 
-  constructor(private backgroundService: BackgroundService) {}
+  constructor(
+    private backgroundService: BackgroundService,
+    private gameService: GameService,
+  ) {}
 
   ngOnInit() {
     this.loadBackgrounds();
+    this.coinsSubscription = this.gameService.coins$.subscribe(coins => {
+      this.currentCoins = coins;
+    });
+    this.gameService.updateCoins();
+  }
+
+  ngOnDestroy(): void {
+    this.coinsSubscription.unsubscribe();
   }
 
   private loadBackgrounds() {
@@ -46,12 +61,15 @@ export class ShopComponent implements OnInit {
         const ownedIds = response.available_bg ? 
           response.available_bg.split(',').filter((id: string) => id !== '') : [];
         console.log('Массив ID купленных фонов:', ownedIds);
+        const currentBackground = this.backgroundService.getSelectedBackground();
         this.backgrounds = MOCK_BACKGROUNDS.map((bg: BackgroundTheme) => {
           const isOwned = ownedIds.includes(bg.id.toString());
-          console.log(`Фон ${bg.id} (${bg.name}): owned = ${isOwned}`);
+          const isSelected = bg.imageUrl === currentBackground;
+          console.log(`Фон ${bg.id} (${bg.name}): owned = ${isOwned}, selected = ${isSelected}`);
           return {
             ...bg,
-            owned: isOwned
+            owned: isOwned,
+            selected: isSelected
           };
         });
         console.log('Итоговый массив фонов:', this.backgrounds);
@@ -99,7 +117,7 @@ export class ShopComponent implements OnInit {
         (response) => {
           background.owned = true;
           this.selectBackground(background);
-          
+          this.gameService.updateCoins();
         },
         (error) => {
           console.error('Ошибка при покупке фона:', error);
@@ -110,6 +128,10 @@ export class ShopComponent implements OnInit {
 
   selectBackground(background: BackgroundTheme) {
     this.backgroundService.setSelectedBackground(background.imageUrl);
+    // Обновляем состояние выбранного фона для всех фонов
+    this.backgrounds.forEach(bg => {
+      bg.selected = bg.imageUrl === background.imageUrl;
+    });
     if (this.backgroundComponent) {
       this.backgroundComponent.setBackground();
     }

@@ -10,6 +10,7 @@ export interface BackgroundTheme {
   price: number;
   imageUrl: string;
   owned: boolean;
+  selected?: boolean;
 }
 
 interface AvailableBackgroundsResponse {
@@ -17,6 +18,13 @@ interface AvailableBackgroundsResponse {
 }
 
 export const MOCK_BACKGROUNDS: BackgroundTheme[] = [
+  {
+    id: 0,
+    name: 'По умолчанию',
+    price: 0,
+    imageUrl: 'assets/images/shop/default.jpg',
+    owned: true
+  },
   {
     id: 1,
     name: 'Тёмный лес',
@@ -43,6 +51,55 @@ export const MOCK_BACKGROUNDS: BackgroundTheme[] = [
     name: 'Болото',
     price: 2500,
     imageUrl: 'assets/images/shop/background4.jpg',
+    owned: false
+  },
+  {
+    id: 5,
+    name: 'Заброшенный вертолет',
+    price: 3000,
+    imageUrl: 'assets/images/shop/background5.png',
+    owned: false
+  },
+  {
+    id: 6,
+    name: 'Руины',
+    price: 3000,
+    imageUrl: 'assets/images/shop/background6.png',
+    owned: false
+  },
+  {
+    id: 7,
+    name: 'КПП',
+    price: 3000,
+    imageUrl: 'assets/images/shop/background7.png',
+    owned: false
+  },
+  {
+    id: 8,
+    name: 'Колесо обозрения',
+    price: 3000,
+    imageUrl: 'assets/images/shop/background8.png',
+    owned: false
+  },
+  {
+    id: 9,
+    name: 'Рассвет',
+    price: 3000,
+    imageUrl: 'assets/images/shop/background9.png',
+    owned: false
+  },
+  {
+    id: 10,
+    name: 'Тёмный лес',
+    price: 3000,
+    imageUrl: 'assets/images/shop/background10.png',
+    owned: false
+  },
+  {
+    id: 11,
+    name: 'Фабрика',
+    price: 3000,
+    imageUrl: 'assets/images/shop/background11.png',
     owned: false
   }
 ];

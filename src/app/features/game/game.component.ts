@@ -40,7 +40,7 @@ export class GameComponent implements OnInit, OnDestroy{
   private readonly defeatPhrases = defeatPhrases;
   private readonly victoryPhrases = victoryPhrases;
 
-  coinsSubscription = new Subscription
+  coinsSubscription = new Subscription;
   
   firstClicked = false;
   gameStatus: GameStatus = GameStatus.init;

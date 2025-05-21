@@ -6,7 +6,7 @@
         </mat-card-header>
 
         <mat-card-content>
-            <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" *ngIf="!show2faForm">
+            <form [formGroup]="loginForm" *ngIf="!show2faForm">
                 <mat-form-field appearance="outline"
                                 class="form-field"
                                 subscriptSizing="dynamic"
@@ -64,7 +64,7 @@
                 </div>
             </form>
 
-            <form [formGroup]="otpForm" (ngSubmit)="submit2fa()" *ngIf="show2faForm" class="verify">
+            <form [formGroup]="otpForm" *ngIf="show2faForm" class="verify">
                 <mat-form-field appearance="outline">
                     <mat-label>Код подтверждения</mat-label>
                     <input matInput formControlName="otp" type="text" required>
@@ -73,7 +73,10 @@
                     </mat-error>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" type="submit" [disabled]="!otpForm.valid || loading">
+                <button mat-raised-button
+                        color="primary"
+                        (click)="submit2fa()"
+                        [disabled]="!otpForm.valid || loading">
                     <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
                     <span *ngIf="!loading">Подтвердить</span>
                 </button>
