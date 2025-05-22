@@ -123,6 +123,10 @@ export class BackgroundService {
     localStorage.setItem(this.STORAGE_KEY, backgroundUrl);
   }
 
+  setDefaultBackground(): void {
+    localStorage.setItem(this.STORAGE_KEY, 'assets/images/game-bg.jpg')
+  }
+
   getAvailableBackgrounds(): Observable<AvailableBackgroundsResponse> {
     return this.baseAPIService.get<AvailableBackgroundsResponse>('/get_available_bg');
   }

@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { GameBackgroundComponent } from '../../features/background/background.component';
+import { BackgroundService } from '../../services/background.service';
 
 
 @Component({
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private backgroundService: BackgroundService
   ) { }
 
   ngOnInit(): void {
@@ -78,6 +80,7 @@ export class LoginComponent implements OnInit{
           this.show2faForm = true;
           this.loading = false;
         } else {
+          this.backgroundService.setDefaultBackground();
           this.authService.navigate();
         }
       },
@@ -96,6 +99,7 @@ export class LoginComponent implements OnInit{
     
     this.authService.verify2faLogin(data).subscribe(
       (res) => {
+        this.backgroundService.setDefaultBackground();
         this.authService.navigate();
       },
       (error) => {
